@@ -351,7 +351,7 @@ body.fadeout{opacity:0}
           <p style="margin-top:6px;line-height:1.5"><span class="bold">Immediate Remediation:</span> Deactivating Feature toggle <span class="code">useDataLocality</span></p>
         </div>
         <div class="slack-btns">
-          <a href="#" class="slack-btn" id="investigateBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Investigate with Cursor</a>
+          <a href="/" class="slack-btn" id="investigateBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Investigate with Cursor</a>
           <a href="#" class="slack-btn" id="claudeBtn" onclick="event.preventDefault();document.body.classList.add('fadeout');setTimeout(function(){window.location.href='claude-code.html'},500)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Investigate with Claude Code</a>
         </div>
       </div>
@@ -545,7 +545,7 @@ document.body.classList.add('page-fade-in');
 
 // ── AUTO-RESOLVE when returning from Claude Code ──
 if (window.location.search.indexOf('from=claude') !== -1) {
-  history.replaceState(null, '', 'slack.html');
+  history.replaceState(null, '', '/slack.html');
   frame = 1;
   busy = true;
 
