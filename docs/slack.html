@@ -11,6 +11,19 @@ body{font-family:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sa
 body.fadeout{opacity:0}
 .page-fade-in{animation:pageFadeIn .6s ease}
 @keyframes pageFadeIn{from{opacity:0}to{opacity:1}}
+
+/* ── STAGE CONCEPT OVERLAY ── */
+.stage-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:999;opacity:0;pointer-events:none;transition:opacity .5s ease;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;backdrop-filter:blur(6px)}
+.stage-overlay.on{opacity:1;pointer-events:auto}
+.stage-overlay .so-num{color:rgba(255,255,255,.1);font-size:100px;font-weight:900;line-height:1;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+.stage-overlay .so-title{color:#fff;font-size:36px;font-weight:700;letter-spacing:.5px}
+.stage-overlay .so-desc{color:rgba(255,255,255,.6);font-size:20px;max-width:700px;text-align:center;line-height:1.6}
+
+/* ── SLACK SPOTLIGHT (zoom on Slack elements) ── */
+.slack-spot{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.82);z-index:998;opacity:0;pointer-events:none;transition:opacity .5s ease;display:flex;align-items:center;justify-content:center;padding:40px;backdrop-filter:blur(4px)}
+.slack-spot.on{opacity:1;pointer-events:auto}
+.slack-spot-card{background:#fff;border-radius:10px;padding:28px 36px;max-width:700px;width:100%;box-shadow:0 8px 60px rgba(0,0,0,.6);transform:scale(.92);opacity:0;transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .4s ease;font-family:'Lato',sans-serif;color:#1d1c1d;font-size:15px;line-height:1.6}
+.slack-spot.on .slack-spot-card{transform:scale(1);opacity:1}
 ::selection{background:#1264a3;color:#fff}
 
 /* ─── TOP BAR ─── */
@@ -465,129 +478,154 @@ body.fadeout{opacity:0}
 
 </div><!-- /app -->
 
+<!-- STAGE CONCEPT OVERLAY -->
+<div class="stage-overlay" id="stageOverlay">
+  <div class="so-num" id="soNum"></div>
+  <div class="so-title" id="soTitle"></div>
+  <div class="so-desc" id="soDesc"></div>
+</div>
+
+<!-- SLACK SPOTLIGHT (zoom on Slack elements) -->
+<div class="slack-spot" id="slackSpot">
+  <div class="slack-spot-card" id="slackSpotCard"></div>
+</div>
+
 <script>
-// Demo Flow:
-// Frame 1: #bookings-urgent — red alert + Wix AI (click anywhere)
-// Frame 2: Click → fix message appears (FT deactivated) (click anywhere)
-// Frame 3: Click → alerts turn green + CI Notifier badge appears in sidebar
-// Frame 4: Click CI Notifier in sidebar → switch to CI Notifier view
-// Frame 5: Click #bookings-urgent in sidebar → back to channel + metrics
-let frame = 1;
-let busy = false;
+var W = function(ms) { return new Promise(function(r) { setTimeout(r, ms); }); };
 
 function scrollBottom(el) {
-  setTimeout(() => el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }), 100);
+  setTimeout(function() { el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }); }, 100);
 }
 
 function showView(view) {
-  const isChannel = view === 'channel';
+  var isChannel = view === 'channel';
   document.getElementById('channelView').classList.toggle('hidden', !isChannel);
   document.getElementById('ciView').classList.toggle('hidden', isChannel);
   document.getElementById('sidebarBookings').classList.toggle('active', isChannel);
   document.getElementById('sidebarCI').classList.toggle('active', !isChannel);
 }
 
-// Sidebar: CI Notifier click
-document.getElementById('sidebarCI').addEventListener('click', function(e) {
-  e.stopPropagation();
-  if (frame === 3) {
-    showView('ci');
-    document.getElementById('ciBadge').style.display = 'none';
-    frame = 4;
-  }
-});
+function stageCard(num, title, desc, dur) {
+  return new Promise(function(resolve) {
+    document.getElementById('soNum').textContent = num;
+    document.getElementById('soTitle').textContent = title;
+    document.getElementById('soDesc').textContent = desc;
+    document.getElementById('stageOverlay').classList.add('on');
+    setTimeout(function() {
+      document.getElementById('stageOverlay').classList.remove('on');
+      setTimeout(resolve, 400);
+    }, dur);
+  });
+}
 
-// Sidebar: #bookings-urgent click
-document.getElementById('sidebarBookings').addEventListener('click', function(e) {
-  e.stopPropagation();
-  if (frame === 4) {
-    showView('channel');
-    document.getElementById('metricsMsg').classList.add('show');
-    scrollBottom(document.getElementById('channelMessages'));
-    frame = 5;
-  }
-});
+function goGreen() {
+  document.getElementById('alertAttach').style.borderLeftColor = '#2eb67d';
+  document.getElementById('alertPrefix').textContent = '\u2705 RESOLVED';
+  document.getElementById('alertPrefix').style.color = '#2eb67d';
+  document.getElementById('resolvedBadge').classList.add('show');
+  document.getElementById('quoteBlock').style.borderLeftColor = '#2eb67d';
+  document.getElementById('fixReactions').style.display = 'flex';
+  document.getElementById('opsgenieAttach').style.borderLeftColor = '#2eb67d';
+  document.querySelector('#opsgenieAttach .attach-title').style.color = '#2eb67d';
+  document.getElementById('ciBadge').style.display = 'inline-block';
+}
 
-// General click — advances frames 1→2→3
-document.addEventListener('click', function(e) {
-  if (e.target.closest('#investigateBtn')) return;
-  if (e.target.closest('#claudeBtn')) return;
-  if (e.target.closest('#sidebarCI')) return;
-  if (e.target.closest('#sidebarBookings')) return;
-  if (busy) return;
-  busy = true;
-  setTimeout(() => { busy = false; }, 400);
+function slackSpot(html, dur) {
+  return new Promise(function(resolve) {
+    var spot = document.getElementById('slackSpot');
+    document.getElementById('slackSpotCard').innerHTML = html;
+    spot.classList.add('on');
+    setTimeout(function() {
+      spot.classList.remove('on');
+      setTimeout(resolve, 400);
+    }, dur);
+  });
+}
 
-  if (frame === 1) {
-    // Frame 2: Show FT deactivation message
-    document.getElementById('fixMsg').classList.add('show');
-    scrollBottom(document.getElementById('channelMessages'));
-    frame = 2;
-
-  } else if (frame === 2) {
-    // Frame 3: Everything turns green + CI Notifier gets badge
-    document.getElementById('alertAttach').style.borderLeftColor = '#2eb67d';
-    document.getElementById('alertPrefix').textContent = '✅ RESOLVED';
-    document.getElementById('alertPrefix').style.color = '#2eb67d';
-    document.getElementById('resolvedBadge').classList.add('show');
-    document.getElementById('quoteBlock').style.borderLeftColor = '#2eb67d';
-    document.getElementById('fixReactions').style.display = 'flex';
-    document.getElementById('opsgenieAttach').style.borderLeftColor = '#2eb67d';
-    document.querySelector('#opsgenieAttach .attach-title').style.color = '#2eb67d';
-    // Show CI Notifier notification badge
-    document.getElementById('ciBadge').style.display = 'inline-block';
-    frame = 3;
-  }
-});
-
-// ── FADE IN on load ──
 document.body.classList.add('page-fade-in');
 
-// ── AUTO-RESOLVE when returning from Claude Code ──
-if (window.location.search.indexOf('from=claude') !== -1) {
-  history.replaceState(null, '', '/slack.html');
-  frame = 1;
-  busy = true;
+var isReturn = window.location.search.indexOf('from=claude') !== -1;
 
-  async function autoResolve() {
-    var W = function(ms) { return new Promise(function(r) { setTimeout(r, ms); }); };
+if (isReturn) {
+  history.replaceState(null, '', 'slack.html');
+}
 
-    await W(1200);
-    // Frame 2: FT deactivation
+async function runDemo() {
+
+  if (!isReturn) {
+    // ═══════ PART 1: Slack beginning (auto-play) ═══════
+
+    // Stage 1: Alert
+    await stageCard('1', 'Alert',
+      'Error rate spiking on DeleteAttendance. Response times degrading across key endpoints.',
+      3000);
+
+    // User sees the red alert in Slack for a moment
+    await W(3000);
+
+    // Stage 2: Triage + Stabilization
+    await stageCard('2', 'Triage + Stabilization',
+      'The agent\'s single goal: stabilize the system and reduce urgency. It checks recent commits, deployment, and flags the impact area.',
+      3000);
+
+    // Auto-show FT deactivation message
     document.getElementById('fixMsg').classList.add('show');
     scrollBottom(document.getElementById('channelMessages'));
-    frame = 2;
+    await W(1500);
+
+    // Spotlight zoom on the remediation — this is the key thing to see
+    await slackSpot(
+      '<div style="margin-bottom:16px;font-size:13px;color:#888;text-transform:uppercase;letter-spacing:1px;font-weight:700">Automated Stabilization</div>' +
+      '<div style="background:#f0faf4;border:1px solid #b7e4c7;border-radius:8px;padding:16px 20px;margin-bottom:14px">' +
+        '<p style="font-size:17px;font-weight:700;color:#1d1c1d;margin-bottom:8px">✅ Automated remediation applied.</p>' +
+        '<p style="font-size:16px;line-height:1.6;color:#1d1c1d">Feature toggle <span style="background:#e8f5e9;border:1px solid #b7e4c7;border-radius:3px;padding:1px 6px;font-family:monospace;font-size:14px;color:#2eb67d;font-weight:700">useDataLocality</span> has been <strong>deactivated</strong> for artifact <span style="background:#e8f5e9;border:1px solid #b7e4c7;border-radius:3px;padding:1px 6px;font-family:monospace;font-size:14px;color:#2eb67d;font-weight:700">bookings-attendance</span>.</p>' +
+        '<p style="font-size:15px;margin-top:10px;color:#616061">DeleteAttendance P95 latency: <strong style="color:#e01e5a;text-decoration:line-through">8.5s</strong> → <strong style="color:#2eb67d;font-size:18px">120ms</strong> ↓</p>' +
+      '</div>' +
+      '<div style="color:#888;font-size:14px;text-align:center;font-style:italic">Production is now stable. The immediate threat is resolved.</div>',
+      4500);
+
+    // Stage 3: Further Investigation
+    await stageCard('3', 'Further Investigation',
+      'Production is stable. The engineer initiates a deep investigation — choosing Claude Code as the environment.',
+      3000);
+
+    // Brief pause to see Slack, then auto-navigate
+    await W(800);
+    document.body.classList.add('fadeout');
+    await W(500);
+    window.location.href = 'claude-code.html';
+
+  } else {
+    // ═══════ PART 2: Return from Claude Code ═══════
+
+    // Stage 7: Fix Applied
+    await stageCard('7', 'Fix Applied → Full Rollout',
+      'The fix is merged. The agent resumes the gradual rollout pipeline, monitoring all the way to 100%.',
+      3000);
+
+    // Auto-show FT deactivation
+    await W(800);
+    document.getElementById('fixMsg').classList.add('show');
+    scrollBottom(document.getElementById('channelMessages'));
+
+    await W(1500);
+    // Everything green
+    goGreen();
 
     await W(2000);
-    // Frame 3: Everything green + CI badge
-    document.getElementById('alertAttach').style.borderLeftColor = '#2eb67d';
-    document.getElementById('alertPrefix').textContent = '\u2705 RESOLVED';
-    document.getElementById('alertPrefix').style.color = '#2eb67d';
-    document.getElementById('resolvedBadge').classList.add('show');
-    document.getElementById('quoteBlock').style.borderLeftColor = '#2eb67d';
-    document.getElementById('fixReactions').style.display = 'flex';
-    document.getElementById('opsgenieAttach').style.borderLeftColor = '#2eb67d';
-    document.querySelector('#opsgenieAttach .attach-title').style.color = '#2eb67d';
-    document.getElementById('ciBadge').style.display = 'inline-block';
-    frame = 3;
-
-    await W(2000);
-    // Frame 4: Auto-click CI Notifier
+    // Show CI Notifier
     showView('ci');
     document.getElementById('ciBadge').style.display = 'none';
-    frame = 4;
 
     await W(3000);
-    // Frame 5: Back to channel + metrics
+    // Back to channel + metrics
     showView('channel');
     document.getElementById('metricsMsg').classList.add('show');
     scrollBottom(document.getElementById('channelMessages'));
-    frame = 5;
-    busy = false;
   }
-
-  autoResolve();
 }
+
+setTimeout(runDemo, 600);
 </script>
 </body>
 </html>

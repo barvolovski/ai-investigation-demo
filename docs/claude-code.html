@@ -586,8 +586,8 @@ async function run() {
   show('B_1f');
   await W(500);
 
-  // ── ZOOM 1: Slide 1 — Further Investigation ──
-  await zoom('SLIDE_1', 5000, 'Further Investigation', 'The agent transitions from a generic chatbot to a scoped, service-specific co-pilot.');
+  // ── ZOOM 1: Further Investigation ──
+  await zoom('SLIDE_1', 5000, 'Further Investigation', 'The agent pulls alert context, service ownership, and deployment history — all in parallel using the server-infra MCP plugin.');
 
   // ── STEP 2: Metrics & Logs ──
   show('B_2t');
@@ -607,8 +607,8 @@ async function run() {
   show('B_2f');
   await W(500);
 
-  // ── ZOOM 2: Slide 2 — Enriching Context ──
-  await zoom('SLIDE_2', 5500, 'Enriching Context', 'Enhance the alert with relevant data — ownership, deployment history, service architecture, logs, and runtime telemetry — to support faster root-cause analysis.');
+  // ── ZOOM 2: Enriching Context ──
+  await zoom('SLIDE_2', 5500, 'Enriching Context', 'Ownership + deployment timing + 70x latency degradation + MySQL timeout pattern.');
 
   // ── STEP 3: DB Deep Dive ──
   show('B_3t');
@@ -659,8 +659,8 @@ async function run() {
   show('B_conclusion'); stat(14800, 0.51, 18);
   await W(800);
 
-  // ── ZOOM 3: Slide 3 — Root Cause Analysis ──
-  await zoom('SLIDE_3', 6000, 'Root Cause Analysis', 'Focus on runtime configurations with dedicated tools. Validate through commit history, EXPLAIN analysis, and detailed examination of system logs.');
+  // ── ZOOM 3: Root Cause Analysis ──
+  await zoom('SLIDE_3', 6000, 'Root Cause Analysis', 'sessionId.s (raw string) bypasses the hash index → 40M row full table scan on every delete.');
 
   // ── STEP 6: Fixing the Issue ──
   show('B_6t');
@@ -687,8 +687,8 @@ async function run() {
   show('B_6d'); stat(94200, 0.81, 47);
   await W(800);
 
-  // ── ZOOM 4: Slide 4 — Fixing the Issue ──
-  await zoom('SLIDE_4', 6000, 'Fixing the Issue', 'The developer works closely with the coding agent, collaborating step by step to identify, analyze, and resolve the issue — then issues a PR for review and merge.');
+  // ── ZOOM 4: Fixing the Issue ──
+  await zoom('SLIDE_4', 6000, 'Fixing the Issue', 'Explore → Update → PR created. Full loop in ~2 minutes.');
 
   show('B_end');
   scrollDown(true);
