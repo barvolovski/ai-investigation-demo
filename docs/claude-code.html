@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>claude</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#000;color:#d4d4d4;font-family:'JetBrains Mono','SF Mono','Monaco','Menlo','Consolas',monospace;font-size:13.5px;line-height:1.55;height:100vh;overflow:hidden;display:flex;flex-direction:column;transition:opacity .6s ease}
+body.fadeout{opacity:0}
+body{animation:fadeIn .5s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ── TITLEBAR (macOS terminal) ── */
+.tb{height:37px;background:#1c1c1c;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid #2a2a2a;flex-shrink:0;-webkit-user-select:none}
+.dots{display:flex;gap:8px;margin-right:12px}.dots span{width:12px;height:12px;border-radius:50%}
+.dr{background:#ff5f57}.dy{background:#febc2e}.dg{background:#28c840}
+.tb-t{flex:1;text-align:center;font-size:12px;color:#666;letter-spacing:.2px}
+
+/* ── TERMINAL VIEWPORT ── */
+.vp{flex:1;overflow:hidden;position:relative}
+.sw{position:absolute;top:0;left:0;right:0;padding:20px 28px 350px;will-change:transform}
+
+/* ── STATUSBAR ── */
+.sb{height:26px;background:#1c1c1c;border-top:1px solid #2a2a2a;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:10.5px;color:#555;flex-shrink:0;letter-spacing:.2px}
+.sb .ml{color:#7aa2f7;font-weight:600}.sb .ct{color:#9ece6a}
+
+/* ── BLOCK: INVISIBLE UNTIL SHOWN ── */
+.blk{opacity:0;max-height:0;overflow:hidden;transition:opacity .35s ease,max-height .01s}
+.blk.vis{opacity:1;max-height:9999px;overflow:visible}
+
+/* ── WELCOME BOX (Unicode borders) ── */
+.welc{color:#888;margin-bottom:14px;white-space:pre;line-height:1.45}
+.welc .star{color:#ff9e64;font-weight:700}
+.welc .pth{color:#7aa2f7}
+.welc .hl{color:#d4d4d4;font-weight:700}
+
+/* ── USER PROMPT ── */
+.prompt{margin:8px 0 12px;display:flex;gap:8px;align-items:flex-start}
+.caret{color:#7aa2f7;font-weight:700;font-size:16px;line-height:1.45;flex-shrink:0}
+.ptxt{color:#d4d4d4;line-height:1.5;max-width:calc(100% - 30px)}
+.cursor{display:inline-block;width:8px;height:17px;background:#7aa2f7;vertical-align:text-bottom;margin-left:1px;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ── THINKING ── */
+.think{margin:8px 0 4px;color:#555;font-size:12.5px}
+.think-h{display:flex;align-items:center;gap:5px}
+.think-ico{color:#bb9af7}
+.think-bd{padding:2px 0 4px 20px;font-style:italic;line-height:1.6;color:#4a4a6a}
+
+/* ── TOOL CALL (text-based, like real Claude Code) ── */
+.tool{margin:4px 0 2px}
+.tool-h{display:flex;align-items:center;gap:5px;color:#888;font-size:12.5px}
+.tool-tri{color:#7aa2f7;font-size:11px}
+.tool-nm{color:#7dcfff;font-weight:600}
+.tool-lb{color:#555;font-size:11.5px}
+.tool-dur{color:#3a3a3a;font-size:10px;margin-left:auto}
+.tool-out{padding:2px 0 4px 20px;color:#aaa;font-size:12.5px;white-space:pre-wrap;line-height:1.5}
+.tool-out .bar{color:#333;user-select:none}
+
+/* ── COLORS ── */
+.r{color:#f7768e}.g{color:#9ece6a}.b{color:#7aa2f7}.cy{color:#7dcfff}.y{color:#e0af68}.o{color:#ff9e64}.p{color:#bb9af7}.d{color:#555}.w{color:#d4d4d4}.bold{font-weight:700}
+
+/* ── FINDING LINE ── */
+.find{margin:6px 0 8px 20px;padding-left:8px;border-left:2px solid #e0af68;color:#aaa;font-size:12px;line-height:1.6}
+.find.crit{border-left-color:#f7768e}
+
+/* ── DIVIDER ── */
+.div{border:none;border-top:1px solid #1a1a1a;margin:10px 0}
+
+/* ── RESPONSE TEXT (Claude's direct text) ── */
+.resp{margin:6px 0;font-size:12.5px;line-height:1.65;color:#c0c0c0}
+.resp strong{color:#d4d4d4;font-weight:700}
+.resp code{background:#111;color:#7dcfff;padding:0 4px;border-radius:2px;font-size:12px}
+
+/* ── EVIDENCE TABLE (text-based) ── */
+.etbl{font-size:11.5px;line-height:1.5;margin:4px 0 6px;color:#aaa;white-space:pre}
+.etbl .hdr{color:#7aa2f7;font-weight:600}
+
+/* ── CODE BLOCK ── */
+.cblk{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:3px;padding:8px 12px;margin:4px 0 8px;font-size:12px;line-height:1.5;white-space:pre-wrap;color:#d4d4d4}
+
+/* ── IMPACT ── */
+.impact{margin:6px 0;padding:6px 10px;color:#9ece6a;font-weight:600;font-size:12px}
+
+/* ── SPOTLIGHT OVERLAY (replaces broken CSS zoom) ── */
+.zdim{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.92);z-index:50;opacity:0;pointer-events:none;transition:opacity .5s ease;display:flex;align-items:center;justify-content:center;padding:40px 60px}
+.zdim.on{opacity:1;pointer-events:auto}
+.spotlight{max-width:920px;width:100%;max-height:calc(100vh - 120px);overflow-y:auto;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:8px;padding:28px 36px;font-size:16px;line-height:1.7;color:#d4d4d4;white-space:pre-wrap;box-shadow:0 0 100px rgba(122,162,247,.12),0 4px 60px rgba(0,0,0,.8);transform:scale(.92);opacity:0;transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .4s ease}
+.spotlight::-webkit-scrollbar{width:5px}.spotlight::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+.zdim.on .spotlight{transform:scale(1);opacity:1}
+.spotlight .tool-nm{font-size:16px}.spotlight .tool-tri{font-size:14px}.spotlight .tool-lb{font-size:14px}.spotlight .tool-dur{font-size:12px}
+.spotlight .tool-out{font-size:15.5px;line-height:1.65;padding-left:24px}
+.spotlight .tool-h{font-size:16px}
+.spotlight .find{font-size:15px;line-height:1.7;margin-left:0;padding:10px 14px;border-left-width:3px}
+.spotlight .resp{font-size:15px;line-height:1.7}
+.spotlight .etbl{font-size:14px;line-height:1.6}
+.spotlight .cblk{font-size:14px;line-height:1.6}
+.spotlight .impact{font-size:15px}
+.spotlight code{font-size:14px}
+.spotlight .r{color:#f7768e}.spotlight .g{color:#9ece6a}.spotlight .b{color:#7aa2f7}.spotlight .cy{color:#7dcfff}.spotlight .y{color:#e0af68}.spotlight .o{color:#ff9e64}.spotlight .p{color:#bb9af7}
+.spotlight .bold{font-weight:700}
+.spotlight .bar{color:#333}
+.zoomable{}
+
+/* ── SPINNER ── */
+.spin{display:none;align-items:center;gap:5px;margin:4px 0 4px 20px;color:#444;font-size:11px}
+.spin.on{display:flex}
+.sd{width:4px;height:4px;border-radius:50%;background:#7aa2f7;animation:pls 1.2s ease-in-out infinite}
+.sd:nth-child(2){animation-delay:.15s}.sd:nth-child(3){animation-delay:.3s}
+@keyframes pls{0%,100%{opacity:.15}50%{opacity:1}}
+</style>
+</head>
+<body>
+
+<div class="tb">
+  <div class="dots"><span class="dr"></span><span class="dy"></span><span class="dg"></span></div>
+  <div class="tb-t">orst — ~/projects/scheduler — claude</div>
+</div>
+
+<div class="vp" id="vp">
+<div class="sw" id="sw">
+
+<!-- ═══════ WELCOME ═══════ -->
+<div class="blk welc" id="B0"><span class="star">╭──────────────────────────────────────────────────────╮</span>
+<span class="star">│</span> <span class="star">✻</span> <span class="hl">Welcome to Claude Code!</span>                             <span class="star">│</span>
+<span class="star">│</span>                                                      <span class="star">│</span>
+<span class="star">│</span>   /help for help                                     <span class="star">│</span>
+<span class="star">│</span>                                                      <span class="star">│</span>
+<span class="star">│</span>   cwd: <span class="pth">/Users/orst/projects/scheduler</span>                <span class="star">│</span>
+<span class="star">╰──────────────────────────────────────────────────────╯</span></div>
+
+<!-- ═══════ PROMPT ═══════ -->
+<div class="blk prompt" id="B1">
+  <span class="caret">❯</span>
+  <span class="ptxt" id="ptxt"></span><span class="cursor" id="pcur"></span>
+</div>
+
+<!-- ═══════ STEP 1: ALERT TRIAGE ═══════ -->
+<div class="blk think" id="B_1t">
+  <div class="think-h"><span class="think-ico">⏵</span> Thinking…</div>
+  <div class="think-bd">Alert on #bookings-urgent about DeleteAttendance. Pulling alert details, service ownership, and recent deployments — all in parallel.</div>
+</div>
+
+<div class="blk tool" id="B_1a">
+  <div class="tool-h"><span class="tool-tri">⏵</span> <span class="tool-nm">slack_find_channel</span> <span class="tool-lb">#bookings-urgent</span> <span class="tool-dur">820ms</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>Channel: #bookings-urgent (C04N8QXYZ) · Last alert: 10:45 AM
+<span class="bar">  </span>
+<span class="bar">  </span><span class="r bold">🚨 DB Alert Bot:</span>
+<span class="bar">  </span>  ALERT: High latency on <span class="cy">'bookings_index'</span> in prod-db-3
+<span class="bar">  </span>
+<span class="bar">  </span><span class="b bold">Wix Maintenance Assistant:</span>
+<span class="bar">  </span>  Degradation in <span class="cy">DeleteAttendance</span> → feature toggle <span class="y">useDataLocality</span>
+<span class="bar">  </span>  Immediate Remediation: Deactivating FT</div>
+</div>
+
+<div class="blk tool" id="B_1b">
+  <div class="tool-h"><span class="tool-tri">⏵</span> <span class="tool-nm">service_registry</span> <span class="tool-lb">bookings-attendance</span> <span class="tool-dur">650ms</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>Service: <span class="cy">bookings-attendance</span> · Owner: <span class="bold">bookings-core</span>
+<span class="bar">  </span>On-call: <span class="o">orst@wix.com</span> · Framework: Loom Prime (JVM)</div>
+</div>
+
+<div class="blk tool" id="B_1c">
+  <div class="tool-h"><span class="tool-tri">⏵</span> <span class="tool-nm">get_rollout_history</span> <span class="tool-lb">last 5 deploys</span> <span class="tool-dur">1.1s</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>v1.7082.0 │ Feb 11 │ <span class="y">reject slot booking + FT</span>       │ <span class="o">orst</span>
+<span class="bar">  </span>v1.7081.0 │ Feb 8  │ Bump deps                      │ ci-bot
+<span class="bar">  </span>v1.7079.0 │ Feb 2  │ <span class="y">Add useDataLocality toggle</span>     │ <span class="o">orst</span>
+<span class="bar">  </span>
+<span class="bar">  </span><span class="y">⚠</span> v1.7082.0 deployed Feb 11 — rollout completed 13:47 UTC</div>
+</div>
+
+<div class="blk find" id="B_1f">
+  <span class="y">⚑</span> Alert 10:45 AM. Owned by <span class="bold">bookings-core</span>. Last deploy v1.7082.0 Feb 11 by <span class="o">orst</span>.
+</div>
+
+<!-- ═══════ STEP 2: METRICS ═══════ -->
+<div class="blk think" id="B_2t">
+  <div class="think-h"><span class="think-ico">⏵</span> Thinking…</div>
+  <div class="think-bd">Need hard numbers. Checking Prometheus for error rates and latency, pulling error logs, finding database bindings.</div>
+</div>
+
+<div class="blk tool" id="B_2a">
+  <div class="tool-h"><span class="tool-tri">⏵</span> <span class="tool-nm">query_prometheus</span> <span class="tool-lb">gRPC errors (1h)</span> <span class="tool-dur">1.4s</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>DeleteAttendance │ <span class="r">DEADLINE_EXCEEDED</span> │ <span class="r bold">1,847</span>
+<span class="bar">  </span>DeleteAttendance │ INTERNAL          │ 23
+<span class="bar">  </span>GetAttendance    │ OK                │ normal
+<span class="bar">  </span>SetAttendance    │ OK                │ normal
+<span class="bar">  </span><span class="y">⚠</span> DeleteAttendance: <span class="r bold">4.2% error rate</span> (baseline: 0.1%)</div>
+</div>
+
+<div class="blk tool zoomable" id="B_2b">
+  <div class="tool-h"><span class="tool-tri">⏵</span> <span class="tool-nm">query_prometheus</span> <span class="tool-lb">P95 latency</span> <span class="tool-dur">1.6s</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>DeleteAttendance │ <span class="r bold">8.5s</span>  │ ~120ms │ <span class="r bold">🔴 70x degradation</span>
+<span class="bar">  </span>GetAttendance    │ 45ms  │ ~40ms  │ <span class="g">✓ OK</span>
+<span class="bar">  </span>SetAttendance    │ 89ms  │ ~80ms  │ <span class="g">✓ OK</span>
+<span class="bar">  </span>ListAttendance   │ 110ms │ ~95ms  │ <span class="g">✓ OK</span>
+<span class="bar">  </span>
+<span class="bar">  </span><span class="r bold">🔴 DeleteAttendance: 8.5s P95 — 70x degradation from baseline</span></div>
+</div>
+
+<div class="blk tool" id="B_2c">
+  <div class="tool-h"><span class="tool-tri">⏵</span> <span class="tool-nm">query_app_logs</span> <span class="tool-lb">ERROR last 7h</span> <span class="tool-dur">2.1s</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>Found <span class="r bold">847 ERROR</span> entries (last 7h)
+<span class="bar">  </span>Pattern: <span class="r">DeadlineExceededException</span>
+<span class="bar">  </span>"Query exceeded 5000ms on attendance table"
+<span class="bar">  </span>→ deleteBySessionId → SDL.delete → <span class="y">MySQL timeout (5000ms)</span></div>
+</div>
+
+<div class="blk tool" id="B_2d">
+  <div class="tool-h"><span class="tool-tri">⏵</span> <span class="tool-nm">list_bindings</span> <span class="tool-lb">database bindings</span> <span class="tool-dur">780ms</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>Cluster: <span class="cy">bookings_platform</span> │ DB: attendance │ MySQL │ SDL</div>
+</div>
+
+<div class="blk find crit" id="B_2f">
+  <span class="r bold">⚑</span> Only DeleteAttendance affected — <span class="r bold">8.5s P95</span> (70x). Logs: SDL.delete → MySQL timeout on attendance table.
+</div>
+
+<!-- ═══════ STEP 3: DB DEEP DIVE ═══════ -->
+<div class="blk think" id="B_3t">
+  <div class="think-h"><span class="think-ico">⏵</span> Thinking…</div>
+  <div class="think-bd">Slow MySQL query is the smoking gun. Checking table size, schema, and indexes — if the delete does a full table scan on 40M rows, that's it.</div>
+</div>
+
+<div class="blk tool" id="B_3a">
+  <div class="tool-h"><span class="tool-tri">⏵</span> <span class="tool-nm">list_cluster_tables</span> <span class="tool-lb">bookings_platform.attendance</span> <span class="tool-dur">950ms</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>attendance          │ 27,531,842  │ 21.2 GB
+<span class="bar">  </span>attendance_platform │ <span class="r bold">40,377,394</span>  │ <span class="r bold">29.2 GB</span>
+<span class="bar">  </span><span class="y">⚠</span> attendance_platform: <span class="r">40M rows / 29.2 GB</span></div>
+</div>
+
+<div class="blk tool zoomable" id="B_3b">
+  <div class="tool-h"><span class="tool-tri">⏵</span> <span class="tool-nm">get_schema_analysis</span> <span class="tool-lb">attendance_platform</span> <span class="tool-dur">1.2s</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>PK: (tenant_id, entity_id)
+<span class="bar">  </span>
+<span class="bar">  </span>Indexes:
+<span class="bar">  </span>  bookingId_idx   → (tenant_id, bookingId)
+<span class="bar">  </span>  <span class="y bold">sessionId_h_idx</span> → (tenant_id, sessionId_h) ← <span class="y">hash-based!</span>
+<span class="bar">  </span>  eventId_h_idx   → (tenant_id, eventId_h)
+<span class="bar">  </span>
+<span class="bar">  </span>sessionId stored as <span class="p">HashedString</span>:
+<span class="bar">  </span>  ├── sessionId.<span class="g">s</span> → raw string value
+<span class="bar">  </span>  └── sessionId.<span class="o">h</span> → integer hash <span class="y">(used by index!)</span>
+<span class="bar">  </span>
+<span class="bar">  </span><span class="y bold">⚠ sessionId_h_idx indexes the HASH (int), NOT the raw string.</span>
+<span class="bar">  </span><span class="y bold">  If delete filters on .s instead of .h → index bypassed!</span></div>
+</div>
+
+<div class="blk find crit" id="B_3f">
+  <span class="r bold">⚑</span> 40M rows. Index uses hash int. If code queries raw string → full table scan.
+</div>
+
+<!-- ═══════ STEP 4: EXPLAIN ═══════ -->
+<div class="blk think" id="B_4t">
+  <div class="think-h"><span class="think-ico">⏵</span> Thinking…</div>
+  <div class="think-bd">Let me prove it with EXPLAIN on both patterns — the indexed path vs the suspected broken path.</div>
+</div>
+
+<div class="blk tool" id="B_4a">
+  <div class="tool-h"><span class="tool-tri">⏵</span> <span class="tool-nm">explain_sql_query</span> <span class="tool-lb">indexed path</span> <span class="tool-dur">1.8s</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>EXPLAIN — Indexed Query <span class="g">✓</span>
+<span class="bar">  </span>Access: ref │ Key: <span class="g bold">sessionId_h_idx</span> │ Rows: <span class="g bold">1</span> │ Cost: <span class="g bold">0.35</span></div>
+</div>
+
+<div class="blk tool zoomable" id="B_4b">
+  <div class="tool-h"><span class="tool-tri">⏵</span> <span class="tool-nm">explain_sql_query</span> <span class="tool-lb">broken path (raw string)</span> <span class="tool-dur">2.2s</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>EXPLAIN — Unindexed Query <span class="r">🔴</span>
+<span class="bar">  </span>Access: <span class="r bold">ALL</span> │ Key: <span class="r">(none)</span> │ Rows: <span class="r bold">40,377,394</span> │ Cost: <span class="r bold">4,930,313</span>
+<span class="bar">  </span>
+<span class="bar">  </span><span class="r bold">🔴 FULL TABLE SCAN — 40M rows, reading ~29 GB</span>
+<span class="bar">  </span><span class="r bold">🔴 14 MILLION times more expensive than the indexed query</span></div>
+</div>
+
+<div class="blk find crit" id="B_4f">
+  <span class="r bold">⚑ PROVEN:</span> Indexed → <span class="g bold">1 row, cost 0.35</span>. Broken → <span class="r bold">40M rows, cost 4.9M</span>. <span class="r bold">14,000,000x</span> difference.
+</div>
+
+<!-- ═══════ STEP 5: ROOT CAUSE ═══════ -->
+<div class="blk think" id="B_5t">
+  <div class="think-h"><span class="think-ico">⏵</span> Thinking…</div>
+  <div class="think-bd">Database proof is solid. Now finding the exact code change — v1.7082.0 (Feb 11) is the suspect.</div>
+</div>
+
+<div class="blk tool" id="B_5a">
+  <div class="tool-h"><span class="tool-tri">⏵</span> <span class="tool-nm">Bash</span> <span class="tool-lb">git log --oneline</span> <span class="tool-dur">1.4s</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>d0398f8 Feb 17 "align categories docs" (Omer M.)
+<span class="bar">  </span><span class="o bold">a1b2c3d Feb 11 "reject slot booking for course + FT" (orst) ← v1.7082.0</span>
+<span class="bar">  </span>9f8e7d6 Feb 8  "Bump deps" (ci-bot)
+<span class="bar">  </span>1a2b3c4 Feb 2  <span class="y">"Add useDataLocality toggle"</span> (orst)</div>
+</div>
+
+<div class="blk tool zoomable" id="B_5b">
+  <div class="tool-h"><span class="tool-tri">⏵</span> <span class="tool-nm">Bash</span> <span class="tool-lb">rg "deleteBySessionId" --type scala</span> <span class="tool-dur">2.8s</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>Found in <span class="cy bold">AttendanceDeleteHandler.scala</span>:
+<span class="bar">  </span>
+<span class="bar">  </span><span class="d">// OLD PATH (before v1.7082.0):</span>
+<span class="bar">  </span><span class="p">def</span> <span class="b">deleteBySession</span>(tenantId, sessionId) = {
+<span class="bar">  </span>  <span class="p">val</span> hash = HashedString.hash(sessionId)
+<span class="bar">  </span>  sdlClient.delete(<span class="g">"attendance_platform"</span>,
+<span class="bar">  </span>    Query.eq(<span class="g">"tenant_id"</span>, tenantId)
+<span class="bar">  </span>      .and(Query.eq(<span class="g">"sessionId_h"</span>, hash)) <span class="g">// ✓ uses index</span>
+<span class="bar">  </span>  )
+<span class="bar">  </span>}
+<span class="bar">  </span>
+<span class="bar">  </span><span class="d">// NEW PATH (v1.7082.0) ← THE BUG:</span>
+<span class="bar">  </span><span class="p">def</span> <span class="r bold">deleteBySessionForCourse</span>(tenantId, sessionId) = {
+<span class="bar">  </span>  sdlClient.delete(<span class="g">"attendance_platform"</span>,
+<span class="bar">  </span>    Query.jsonExtract(<span class="g">"sessionId.s"</span>, sessionId) <span class="r bold">// 🔴 RAW STRING!</span>
+<span class="bar">  </span>    <span class="d">// ✗ Missing: tenant_id filter</span>
+<span class="bar">  </span>    <span class="d">// ✗ Missing: hash-based lookup</span>
+<span class="bar">  </span>  )
+<span class="bar">  </span>}</div>
+</div>
+
+<div class="blk find crit" id="B_5f">
+  <span class="r bold">⚑ ROOT CAUSE:</span> v1.7082.0 added <span class="r bold">deleteBySessionForCourse()</span> — queries raw <span class="g">sessionId.s</span> via JSON_EXTRACT. No hash, no tenant_id → 40M row scan every call.
+</div>
+
+<!-- ═══════ CONCLUSION (Claude's response text) ═══════ -->
+<div class="blk resp zoomable" id="B_conclusion">
+<strong style="color:#ff9e64;font-size:14px">Root Cause Identified</strong>
+
+<span class="bold">The Feb 11 deployment (v1.7082.0) by orst</span> introduced <code>deleteBySessionForCourse()</code>
+that queries <code>attendance_platform</code> by raw <code>sessionId.s</code> instead of using the
+hash-based index <code>sessionId_h_idx</code>.
+
+<strong class="b">Evidence Chain:</strong>
+<span class="etbl"> <span class="hdr">#  Signal      Finding</span>
+ 1  Deploy      v1.7082.0 — Feb 11, gradual rollout by orst
+ 2  Errors      <span class="r">DEADLINE_EXCEEDED</span> on DeleteAttendance, 4.2% error rate
+ 3  Latency     <span class="r bold">8.5s P95</span> — 70x degradation from 120ms baseline
+ 4  Logs        "Query exceeded 5000ms on attendance table"
+ 5  Schema      <span class="cy">sessionId_h_idx(tenant_id, sessionId_h)</span> — hash index exists
+ 6  EXPLAIN     Full scan: <span class="r">40M rows, cost 4.9M</span> vs indexed: <span class="g">1 row, cost 0.35</span>
+ 7  Code        <span class="r">deleteBySessionForCourse()</span> uses JSON_EXTRACT — bypasses index</span>
+
+<strong class="b">Immediate Mitigation:</strong>
+Deactivate feature toggle <code>useDataLocality</code> — disables broken code path instantly.
+
+<strong class="b">Permanent Fix:</strong>
+<span class="cblk"><span class="d">// Fix: Use hash-based lookup with tenant_id</span>
+<span class="p">def</span> <span class="b">deleteBySessionForCourse</span>(tenantId: UUID, sessionId: String) = {
+  <span class="p">val</span> hash = HashedString.hash(sessionId)
+  sdlClient.delete(<span class="g">"attendance_platform"</span>,
+    Query.eq(<span class="g">"tenant_id"</span>, tenantId)
+      .and(Query.eq(<span class="g">"sessionId_h"</span>, hash))
+  )
+}</span>
+<span class="impact">📉 Query cost: <span class="r" style="color:#f7768e">4,930,313</span> → <span class="g">0.35</span> — 14 million times faster</span>
+</div>
+
+<!-- FINAL PROMPT -->
+<div class="blk prompt" id="B_end">
+  <span class="caret">❯</span>
+  <span class="cursor"></span>
+</div>
+
+<!-- SPINNER -->
+<div class="spin" id="spin"><span class="sd"></span><span class="sd"></span><span class="sd"></span><span id="sptxt"></span></div>
+
+</div><!-- /sw -->
+
+<div class="zdim" id="zdim"><div class="spotlight" id="spotlight"></div></div>
+
+</div><!-- /vp -->
+
+<div class="sb">
+  <div><span class="ml">Claude 4 Opus</span> · <span id="stoks">0 tokens</span></div>
+  <div><span class="ct" id="scost">$0.00</span> · <span id="sreqs">0 API reqs</span></div>
+</div>
+
+<script>
+const sw = document.getElementById('sw');
+const vp = document.getElementById('vp');
+const zdim = document.getElementById('zdim');
+const spin = document.getElementById('spin');
+const sptxt = document.getElementById('sptxt');
+let scrollPos = 0;
+
+function scrollDown(smooth) {
+  const max = sw.scrollHeight - vp.clientHeight + 60;
+  if (max > scrollPos) scrollPos = max;
+  sw.style.transition = smooth ? 'transform .5s cubic-bezier(.22,1,.36,1)' : 'none';
+  sw.style.transform = `translateY(-${Math.max(0, scrollPos)}px)`;
+}
+
+function show(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('vis');
+  requestAnimationFrame(() => scrollDown(true));
+}
+
+function sp(text) { sptxt.textContent = text; spin.classList.add('on'); scrollDown(true); }
+function spOff() { spin.classList.remove('on'); }
+
+function stat(t, c, r) {
+  document.getElementById('stoks').textContent = t.toLocaleString() + ' tokens';
+  document.getElementById('scost').textContent = '$' + c.toFixed(2);
+  document.getElementById('sreqs').textContent = r + ' API reqs';
+}
+
+function zoom(id, dur, label) {
+  return new Promise(resolve => {
+    const el = document.getElementById(id);
+    if (!el) { resolve(); return; }
+    var spot = document.getElementById('spotlight');
+    var hdr = label ? '<div style="color:#7aa2f7;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;opacity:.7">' + label + '</div>' : '';
+    spot.innerHTML = hdr + el.innerHTML;
+    spot.scrollTop = 0;
+    zdim.classList.add('on');
+    setTimeout(() => {
+      zdim.classList.remove('on');
+      setTimeout(() => { spot.innerHTML = ''; resolve(); }, 400);
+    }, dur);
+  });
+}
+
+function typePrompt(text, charMs) {
+  return new Promise(resolve => {
+    const el = document.getElementById('ptxt');
+    const cur = document.getElementById('pcur');
+    let i = 0;
+    (function step() {
+      if (i < text.length) {
+        el.textContent += text[i++];
+        scrollDown(false);
+        setTimeout(step, charMs + Math.random() * charMs * 0.4);
+      } else {
+        cur.style.display = 'none';
+        resolve();
+      }
+    })();
+  });
+}
+
+const W = ms => new Promise(r => setTimeout(r, ms));
+
+async function run() {
+  // Welcome
+  await W(500);
+  show('B0');
+  await W(1200);
+
+  // Prompt
+  show('B1');
+  await W(300);
+  await typePrompt("There's a P1 alert on #bookings-urgent — high latency on DeleteAttendance. Investigate root cause: check alert, metrics, DB, source code. Find what broke and how to fix it.", 12);
+  await W(500);
+
+  // ── STEP 1 ──
+  sp('Pulling alert context…');
+  await W(800);
+  spOff();
+  show('B_1t');
+  await W(1000);
+
+  sp('Running 3 tools in parallel…');
+  await W(600);
+  spOff();
+  show('B_1a'); stat(420, 0.02, 1);
+  await W(1200);
+  show('B_1b'); stat(780, 0.04, 2);
+  await W(800);
+  show('B_1c'); stat(1200, 0.06, 3);
+  await W(1000);
+  show('B_1f');
+  await W(700);
+
+  // ── STEP 2 ──
+  sp('Querying Prometheus & logs…');
+  await W(700);
+  spOff();
+  show('B_2t');
+  await W(800);
+
+  sp('Running 4 tools…');
+  await W(500);
+  spOff();
+  show('B_2a'); stat(2100, 0.09, 5);
+  await W(1000);
+
+  show('B_2b'); stat(2800, 0.12, 6);
+  await W(600);
+  await zoom('B_2b', 2500, '70x LATENCY DEGRADATION');
+
+  show('B_2c'); stat(3600, 0.16, 7);
+  await W(800);
+  show('B_2d'); stat(4000, 0.18, 8);
+  await W(600);
+  show('B_2f');
+  await W(700);
+
+  // ── STEP 3 ──
+  sp('Analyzing database…');
+  await W(600);
+  spOff();
+  show('B_3t');
+  await W(800);
+
+  sp('Querying schema…');
+  await W(400);
+  spOff();
+  show('B_3a'); stat(5200, 0.22, 10);
+  await W(1000);
+
+  show('B_3b'); stat(6100, 0.26, 11);
+  await W(600);
+  await zoom('B_3b', 2800, 'SCHEMA: HASH INDEX vs RAW STRING');
+
+  show('B_3f');
+  await W(600);
+
+  // ── STEP 4 ──
+  sp('Running EXPLAIN…');
+  await W(500);
+  spOff();
+  show('B_4t');
+  await W(700);
+
+  sp('Comparing query plans…');
+  await W(400);
+  spOff();
+  show('B_4a'); stat(7400, 0.31, 13);
+  await W(1000);
+
+  show('B_4b'); stat(8200, 0.35, 14);
+  await W(600);
+  await zoom('B_4b', 3000, 'EXPLAIN PROOF: 14 MILLION x MORE EXPENSIVE');
+
+  show('B_4f');
+  await W(600);
+
+  // ── STEP 5 ──
+  sp('Searching source code…');
+  await W(500);
+  spOff();
+  show('B_5t');
+  await W(700);
+
+  sp('Scanning git history…');
+  await W(400);
+  spOff();
+  show('B_5a'); stat(9800, 0.40, 16);
+  await W(1000);
+
+  show('B_5b'); stat(11200, 0.45, 17);
+  await W(600);
+  await zoom('B_5b', 3200, 'THE BUG: RAW STRING QUERY BYPASSES INDEX');
+
+  show('B_5f');
+  await W(800);
+
+  // ── CONCLUSION ──
+  sp('Generating summary…');
+  await W(1000);
+  spOff();
+  show('B_conclusion'); stat(14800, 0.51, 18);
+  await W(1200);
+  await zoom('B_conclusion', 4000, 'ROOT CAUSE + FIX');
+
+  show('B_end');
+  scrollDown(true);
+
+  // Auto-return to Slack after 3 seconds
+  await W(3000);
+  document.body.classList.add('fadeout');
+  await W(600);
+  window.location.href = 'slack.html?from=claude';
+}
+
+setTimeout(run, 600);
+</script>
+</body>
+</html>
