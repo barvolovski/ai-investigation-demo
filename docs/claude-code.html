@@ -108,6 +108,15 @@ body{animation:fadeIn .5s ease}
 .sd{width:4px;height:4px;border-radius:50%;background:#7aa2f7;animation:pls 1.2s ease-in-out infinite}
 .sd:nth-child(2){animation-delay:.15s}.sd:nth-child(3){animation-delay:.3s}
 @keyframes pls{0%,100%{opacity:.15}50%{opacity:1}}
+
+/* ── MODE TOGGLE ── */
+.mode-toggle{position:fixed;bottom:20px;right:20px;z-index:1100;display:flex;align-items:center;gap:10px;background:rgba(30,30,30,.92);border:1px solid #444;border-radius:28px;padding:6px 8px 6px 14px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;color:#ccc;cursor:pointer;backdrop-filter:blur(6px);box-shadow:0 4px 20px rgba(0,0,0,.4);user-select:none;transition:opacity .3s}
+.mode-toggle:hover{border-color:#888}
+.mode-toggle .mt-label{font-weight:600;letter-spacing:.3px}
+.mt-sw{width:44px;height:24px;border-radius:12px;background:#555;position:relative;transition:background .3s}
+.mt-sw.on{background:#2eb67d}
+.mt-sw::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .3s}
+.mt-sw.on::after{left:23px}
 </style>
 </head>
 <body>
@@ -159,9 +168,9 @@ body{animation:fadeIn .5s ease}
   <div class="tool-out"><span class="bar">⎿ </span>Service: <span class="cy">bookings-attendance</span>
 <span class="bar">  </span>Artifact: com.wixpress.bookings.attendance.bookings-attendance
 <span class="bar">  </span>Owner Team: <span class="bold">bookings-core</span>
-<span class="bar">  </span>Main Contact: maorye@wix.com
+<span class="bar">  </span>Main Contact: galgetz@wix.com
 <span class="bar">  </span>Slack: #bookings-core-urgent
-<span class="bar">  </span>On-call: <span class="o">orst@wix.com</span> (this week)
+<span class="bar">  </span>On-call: <span class="o">galgetz@wix.com</span> (this week)
 <span class="bar">  </span>Framework: Loom Prime (JVM)</div>
 </div>
 
@@ -177,7 +186,7 @@ body{animation:fadeIn .5s ease}
 </div>
 
 <div class="blk find" id="B_1f">
-  <span class="y">⚑</span> Alert 10:45 AM. Owned by <span class="bold">bookings-core</span> (maorye@wix.com). Last deploy: <span class="o bold">v1.7082.0</span> on Feb 11 by <span class="o">orst</span> — "Added validation to reject slot booking for course service".
+  <span class="y">⚑</span> Alert 10:45 AM. Owned by <span class="bold">bookings-core</span> (galgetz@wix.com). Last deploy: <span class="o bold">v1.7082.0</span> on Feb 11 by <span class="o">galgetz</span> — "Added validation to reject slot booking for course service".
 </div>
 
 <!-- ═══════ STEP 2: METRICS ═══════ -->
@@ -404,8 +413,8 @@ Deactivate feature toggle <code>useDataLocality</code> — disables broken code 
 <div style="color:#888;font-size:13px;margin-bottom:16px">Session starts → 3 MCP tools fired in parallel:</div>
 <div style="display:flex;flex-direction:column;gap:14px">
 <div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #7aa2f7"><span class="bold" style="color:#7dcfff;font-size:15px">● server-infra — Find Channel Id</span> <span style="color:#555">(MCP)</span><div style="color:#aaa;font-size:13px;margin-top:4px">Alert context from <span class="bold">#bookings-urgent</span> — DB Alert Bot + Wix Maintenance Assistant</div></div>
-<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #7aa2f7"><span class="bold" style="color:#7dcfff;font-size:15px">● server-infra — get_service_ownership</span> <span style="color:#555">(MCP)</span><div style="color:#aaa;font-size:13px;margin-top:4px">Owner: <span class="bold">bookings-core</span> · Contact: <span class="o">maorye@wix.com</span> · On-call: <span class="o">orst@wix.com</span></div></div>
-<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #e0af68"><span class="bold" style="color:#7dcfff;font-size:15px">● server-infra — get_rollout_history</span> <span style="color:#555">(MCP)</span><div style="color:#aaa;font-size:13px;margin-top:4px">Last deploy: <span class="y bold">v1.7082.0</span> on Feb 11 by <span class="o">orst</span> — <span class="y">"reject slot booking + feature toggle"</span></div></div>
+<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #7aa2f7"><span class="bold" style="color:#7dcfff;font-size:15px">● server-infra — get_service_ownership</span> <span style="color:#555">(MCP)</span><div style="color:#aaa;font-size:13px;margin-top:4px">Owner: <span class="bold">bookings-core</span> · Contact: <span class="o">galgetz@wix.com</span> · On-call: <span class="o">galgetz@wix.com</span></div></div>
+<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #e0af68"><span class="bold" style="color:#7dcfff;font-size:15px">● server-infra — get_rollout_history</span> <span style="color:#555">(MCP)</span><div style="color:#aaa;font-size:13px;margin-top:4px">Last deploy: <span class="y bold">v1.7082.0</span> on Feb 11 by <span class="o">galgetz</span> — <span class="y">"reject slot booking + feature toggle"</span></div></div>
 </div>
 </div>
 </div>
@@ -413,7 +422,7 @@ Deactivate feature toggle <code>useDataLocality</code> — disables broken code 
 <div id="SLIDE_2" style="display:none">
 <div style="white-space:normal;line-height:1.8">
 <div style="display:flex;flex-direction:column;gap:12px">
-<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #ff9e64"><span class="bold" style="color:#ff9e64;font-size:14px">Ownership</span><span style="color:#aaa;font-size:13px"> — <span class="bold">bookings-core</span> team · <span class="o">maorye@wix.com</span> · Urgent: <span class="cy">#bookings-core-urgent</span></span></div>
+<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #ff9e64"><span class="bold" style="color:#ff9e64;font-size:14px">Ownership</span><span style="color:#aaa;font-size:13px"> — <span class="bold">bookings-core</span> team · <span class="o">galgetz@wix.com</span> · Urgent: <span class="cy">#bookings-core-urgent</span></span></div>
 <div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #e0af68"><span class="bold" style="color:#ff9e64;font-size:14px">Last Deploy</span><span style="color:#aaa;font-size:13px"> — <span class="y bold">v1.7082.0</span> Feb 11 by orst · Rollout completed 13:47 UTC</span><div style="color:#f7768e;font-size:13px;font-weight:700;margin-top:4px">⚠ Timing aligns with when errors started spiking</div></div>
 <div style="border-top:1px solid #222;margin:4px 0"></div>
 <div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #f7768e"><span class="bold" style="color:#7aa2f7;font-size:14px">P95 Latency</span><span style="font-size:13px;color:#aaa"> — DeleteAttendance: </span><span class="r bold" style="font-size:18px">8.5s</span><span style="color:#aaa;font-size:13px"> (baseline ~120ms) = </span><span class="r bold" style="font-size:16px">70× degradation</span></div>
@@ -478,7 +487,56 @@ Deactivate feature toggle <code>useDataLocality</code> — disables broken code 
   <img src="pr-screenshot.png" alt="PR #29225">
 </div>
 
+<!-- MODE TOGGLE -->
+<div class="mode-toggle" id="modeToggle">
+  <span class="mt-label" id="mtLabel">Auto</span>
+  <div class="mt-sw on" id="mtSw"></div>
+</div>
+
 <script>
+var autoMode = localStorage.getItem('demoMode') !== 'manual';
+
+(function initToggle() {
+  var sw = document.getElementById('mtSw');
+  var label = document.getElementById('mtLabel');
+  function render() {
+    if (autoMode) { sw.classList.add('on'); label.textContent = 'Auto'; }
+    else { sw.classList.remove('on'); label.textContent = 'Click'; }
+  }
+  render();
+  document.getElementById('modeToggle').addEventListener('click', function() {
+    autoMode = !autoMode;
+    localStorage.setItem('demoMode', autoMode ? 'auto' : 'manual');
+    render();
+  });
+})();
+
+function waitClick() {
+  return new Promise(function(resolve) {
+    function handler(e) {
+      if (e.target.closest('#modeToggle')) return;
+      document.removeEventListener('click', handler);
+      document.removeEventListener('keydown', kHandler);
+      resolve();
+    }
+    function kHandler(e) {
+      if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'Enter') {
+        e.preventDefault();
+        document.removeEventListener('click', kHandler);
+        document.removeEventListener('keydown', kHandler);
+        resolve();
+      }
+    }
+    document.addEventListener('click', handler);
+    document.addEventListener('keydown', kHandler);
+  });
+}
+
+function step(ms) {
+  if (autoMode) return W(ms);
+  return waitClick();
+}
+
 const sw = document.getElementById('sw');
 const vp = document.getElementById('vp');
 const zdim = document.getElementById('zdim');
@@ -529,10 +587,16 @@ function zoom(ids, dur, label, subtitle) {
     spot.innerHTML = hdr + content;
     spot.scrollTop = 0;
     zdim.classList.add('on');
-    setTimeout(() => {
+    function dismiss() {
       zdim.classList.remove('on');
+      zdim.removeEventListener('click', dismiss);
       setTimeout(() => { spot.innerHTML = ''; resolve(); }, 400);
-    }, dur);
+    }
+    if (autoMode) {
+      setTimeout(dismiss, dur);
+    } else {
+      zdim.addEventListener('click', dismiss);
+    }
   });
 }
 
@@ -557,150 +621,157 @@ function typePrompt(text, charMs) {
 const W = ms => new Promise(r => setTimeout(r, ms));
 
 async function run() {
-  // Welcome
   await W(500);
   show('B0');
-  await W(1200);
+  await step(1200);
 
-  // Prompt
   show('B1');
   await W(300);
-  await typePrompt("An alert just fired on #bookings-urgent — error rate on DeleteAttendance spiked. Investigate the root cause, use server-infra plugin", 12);
-  await W(500);
+  if (autoMode) {
+    await typePrompt("An alert just fired on #bookings-urgent — error rate on DeleteAttendance spiked. Investigate the root cause, use server-infra plugin", 12);
+  } else {
+    document.getElementById('ptxt').textContent = "An alert just fired on #bookings-urgent — error rate on DeleteAttendance spiked. Investigate the root cause, use server-infra plugin";
+    document.getElementById('pcur').style.display = 'none';
+  }
+  await step(500);
 
   // ── STEP 1: Alert Triage ──
   show('B_1hdr');
-  await W(400);
+  await W(200);
   show('B_1t');
-  await W(600);
+  await step(600);
 
   sp('Running 3 tools in parallel…');
-  await W(600);
+  await W(autoMode ? 600 : 200);
   spOff();
   show('B_1a'); stat(420, 0.02, 1);
-  await W(1200);
+  await step(1200);
   show('B_1b'); stat(780, 0.04, 2);
-  await W(800);
+  await step(800);
   show('B_1c'); stat(1200, 0.06, 3);
-  await W(800);
+  await step(800);
   show('B_1f');
-  await W(500);
+  await step(500);
 
-  // ── ZOOM 1: Further Investigation ──
+  // ── ZOOM 1 ──
   await zoom('SLIDE_1', 5000, 'Further Investigation', 'The agent pulls alert context, service ownership, and deployment history — all in parallel using the server-infra MCP plugin.');
 
   // ── STEP 2: Metrics & Logs ──
   show('B_2t');
-  await W(600);
+  await step(600);
 
   sp('Querying Prometheus & logs…');
-  await W(500);
+  await W(autoMode ? 500 : 200);
   spOff();
   show('B_2a'); stat(2100, 0.09, 5);
-  await W(800);
+  await step(800);
   show('B_2b'); stat(2800, 0.12, 6);
-  await W(600);
+  await step(600);
   show('B_2c'); stat(3600, 0.16, 7);
-  await W(600);
+  await step(600);
   show('B_2d'); stat(4000, 0.18, 8);
-  await W(500);
+  await step(500);
   show('B_2f');
-  await W(500);
+  await step(500);
 
-  // ── ZOOM 2: Enriching Context ──
+  // ── ZOOM 2 ──
   await zoom('SLIDE_2', 5500, 'Enriching Context', 'Ownership + deployment timing + 70x latency degradation + MySQL timeout pattern.');
 
   // ── STEP 3: DB Deep Dive ──
   show('B_3t');
-  await W(600);
+  await step(600);
 
   sp('Querying schema…');
-  await W(400);
+  await W(autoMode ? 400 : 200);
   spOff();
   show('B_3a'); stat(5200, 0.22, 10);
-  await W(800);
+  await step(800);
   show('B_3b'); stat(6100, 0.26, 11);
-  await W(600);
+  await step(600);
   show('B_3f');
-  await W(600);
+  await step(600);
 
   // ── STEP 4: EXPLAIN ──
   show('B_4t');
-  await W(600);
+  await step(600);
 
   sp('Comparing query plans…');
-  await W(400);
+  await W(autoMode ? 400 : 200);
   spOff();
   show('B_4a'); stat(7400, 0.31, 13);
-  await W(800);
+  await step(800);
   show('B_4b'); stat(8200, 0.35, 14);
-  await W(600);
+  await step(600);
   show('B_4f');
-  await W(600);
+  await step(600);
 
   // ── STEP 5: Root Cause ──
   show('B_5t');
-  await W(600);
+  await step(600);
 
   sp('Scanning source code…');
-  await W(400);
+  await W(autoMode ? 400 : 200);
   spOff();
   show('B_5a'); stat(9800, 0.40, 16);
-  await W(800);
+  await step(800);
   show('B_5b'); stat(11200, 0.45, 17);
-  await W(600);
+  await step(600);
   show('B_5f');
-  await W(800);
+  await step(800);
 
   // ── CONCLUSION ──
   sp('Generating summary…');
-  await W(800);
+  await W(autoMode ? 800 : 200);
   spOff();
   show('B_conclusion'); stat(14800, 0.51, 18);
-  await W(800);
+  await step(800);
 
-  // ── ZOOM 3: Root Cause Analysis ──
+  // ── ZOOM 3 ──
   await zoom('SLIDE_3', 6000, 'Root Cause Analysis', 'sessionId.s (raw string) bypasses the hash index → 40M row full table scan on every delete.');
 
   // ── STEP 6: Fixing the Issue ──
   show('B_6t');
-  await W(600);
+  await step(600);
 
   sp('Exploring source code for fix target…');
-  await W(1000);
+  await W(autoMode ? 1000 : 200);
   spOff();
   show('B_6a'); stat(90900, 0.72, 42);
-  await W(1200);
+  await step(1200);
 
   sp('Applying fix…');
-  await W(600);
+  await W(autoMode ? 600 : 200);
   spOff();
   show('B_6b'); stat(92400, 0.76, 44);
-  await W(1000);
+  await step(1000);
 
   sp('Creating pull request…');
-  await W(800);
+  await W(autoMode ? 800 : 200);
   spOff();
   show('B_6c'); stat(93800, 0.79, 46);
-  await W(800);
+  await step(800);
 
   show('B_6d'); stat(94200, 0.81, 47);
-  await W(800);
+  await step(800);
 
-  // ── ZOOM 4: Fixing the Issue ──
+  // ── ZOOM 4 ──
   await zoom('SLIDE_4', 6000, 'Fixing the Issue', 'Explore → Update → PR created. Full loop in ~2 minutes.');
 
   show('B_end');
   scrollDown(true);
-  await W(1500);
+  await step(1500);
 
-  // ── Show PR page (simulate clicking the link) ──
+  // ── Show PR page ──
   document.getElementById('prOverlay').classList.add('on');
-  await W(5000);
+  if (autoMode) {
+    await W(5000);
+  } else {
+    await waitClick();
+  }
   document.getElementById('prOverlay').classList.remove('on');
-  await W(600);
+  await step(600);
 
-  // Auto-return to Slack
+  // Return to Slack
   document.body.classList.add('fadeout');
   await W(600);
   window.location.href = 'slack.html?from=claude';

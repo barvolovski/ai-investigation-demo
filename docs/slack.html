@@ -24,6 +24,15 @@ body.fadeout{opacity:0}
 .slack-spot.on{opacity:1;pointer-events:auto}
 .slack-spot-card{background:#fff;border-radius:10px;padding:28px 36px;max-width:700px;width:100%;box-shadow:0 8px 60px rgba(0,0,0,.6);transform:scale(.92);opacity:0;transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .4s ease;font-family:'Lato',sans-serif;color:#1d1c1d;font-size:15px;line-height:1.6}
 .slack-spot.on .slack-spot-card{transform:scale(1);opacity:1}
+
+/* ── MODE TOGGLE ── */
+.mode-toggle{position:fixed;bottom:20px;right:20px;z-index:1100;display:flex;align-items:center;gap:10px;background:rgba(30,30,30,.92);border:1px solid #444;border-radius:28px;padding:6px 8px 6px 14px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;color:#ccc;cursor:pointer;backdrop-filter:blur(6px);box-shadow:0 4px 20px rgba(0,0,0,.4);user-select:none;transition:opacity .3s}
+.mode-toggle:hover{border-color:#888}
+.mode-toggle .mt-label{font-weight:600;letter-spacing:.3px}
+.mt-sw{width:44px;height:24px;border-radius:12px;background:#555;position:relative;transition:background .3s}
+.mt-sw.on{background:#2eb67d}
+.mt-sw::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .3s}
+.mt-sw.on::after{left:23px}
 ::selection{background:#1264a3;color:#fff}
 
 /* ─── TOP BAR ─── */
@@ -490,8 +499,58 @@ body.fadeout{opacity:0}
   <div class="slack-spot-card" id="slackSpotCard"></div>
 </div>
 
+<!-- MODE TOGGLE -->
+<div class="mode-toggle" id="modeToggle">
+  <span class="mt-label" id="mtLabel">Auto</span>
+  <div class="mt-sw on" id="mtSw"></div>
+</div>
+
 <script>
+var autoMode = localStorage.getItem('demoMode') !== 'manual';
+
+function initToggle() {
+  var sw = document.getElementById('mtSw');
+  var label = document.getElementById('mtLabel');
+  function render() {
+    if (autoMode) { sw.classList.add('on'); label.textContent = 'Auto'; }
+    else { sw.classList.remove('on'); label.textContent = 'Click'; }
+  }
+  render();
+  document.getElementById('modeToggle').addEventListener('click', function() {
+    autoMode = !autoMode;
+    localStorage.setItem('demoMode', autoMode ? 'auto' : 'manual');
+    render();
+  });
+}
+initToggle();
+
 var W = function(ms) { return new Promise(function(r) { setTimeout(r, ms); }); };
+
+function waitClick() {
+  return new Promise(function(resolve) {
+    function handler(e) {
+      if (e.target.closest('#modeToggle')) return;
+      document.removeEventListener('click', handler);
+      document.removeEventListener('keydown', kHandler);
+      resolve();
+    }
+    function kHandler(e) {
+      if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'Enter') {
+        e.preventDefault();
+        document.removeEventListener('click', kHandler);
+        document.removeEventListener('keydown', kHandler);
+        resolve();
+      }
+    }
+    document.addEventListener('click', handler);
+    document.addEventListener('keydown', kHandler);
+  });
+}
+
+function step(ms) {
+  if (autoMode) return W(ms);
+  return waitClick();
+}
 
 function scrollBottom(el) {
   setTimeout(function() { el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }); }, 100);
@@ -510,11 +569,18 @@ function stageCard(num, title, desc, dur) {
     document.getElementById('soNum').textContent = num;
     document.getElementById('soTitle').textContent = title;
     document.getElementById('soDesc').textContent = desc;
-    document.getElementById('stageOverlay').classList.add('on');
-    setTimeout(function() {
-      document.getElementById('stageOverlay').classList.remove('on');
+    var ov = document.getElementById('stageOverlay');
+    ov.classList.add('on');
+    function dismiss() {
+      ov.classList.remove('on');
+      ov.removeEventListener('click', dismiss);
       setTimeout(resolve, 400);
-    }, dur);
+    }
+    if (autoMode) {
+      setTimeout(dismiss, dur);
+    } else {
+      ov.addEventListener('click', dismiss);
+    }
   });
 }
 
@@ -535,10 +601,16 @@ function slackSpot(html, dur) {
     var spot = document.getElementById('slackSpot');
     document.getElementById('slackSpotCard').innerHTML = html;
     spot.classList.add('on');
-    setTimeout(function() {
+    function dismiss() {
       spot.classList.remove('on');
+      spot.removeEventListener('click', dismiss);
       setTimeout(resolve, 400);
-    }, dur);
+    }
+    if (autoMode) {
+      setTimeout(dismiss, dur);
+    } else {
+      spot.addEventListener('click', dismiss);
+    }
   });
 }
 
@@ -553,27 +625,22 @@ if (isReturn) {
 async function runDemo() {
 
   if (!isReturn) {
-    // ═══════ PART 1: Slack beginning (auto-play) ═══════
+    // ═══════ PART 1: Slack beginning ═══════
 
-    // Stage 1: Alert
     await stageCard('1', 'Alert',
       'Error rate spiking on DeleteAttendance. Response times degrading across key endpoints.',
       3000);
 
-    // User sees the red alert in Slack for a moment
-    await W(3000);
+    await step(3000);
 
-    // Stage 2: Triage + Stabilization
     await stageCard('2', 'Triage + Stabilization',
       'The agent\'s single goal: stabilize the system and reduce urgency. It checks recent commits, deployment, and flags the impact area.',
       3000);
 
-    // Auto-show FT deactivation message
     document.getElementById('fixMsg').classList.add('show');
     scrollBottom(document.getElementById('channelMessages'));
-    await W(1500);
+    await step(1500);
 
-    // Spotlight zoom on the remediation — this is the key thing to see
     await slackSpot(
       '<div style="margin-bottom:16px;font-size:13px;color:#888;text-transform:uppercase;letter-spacing:1px;font-weight:700">Automated Stabilization</div>' +
       '<div style="background:#f0faf4;border:1px solid #b7e4c7;border-radius:8px;padding:16px 20px;margin-bottom:14px">' +
@@ -584,13 +651,11 @@ async function runDemo() {
       '<div style="color:#888;font-size:14px;text-align:center;font-style:italic">Production is now stable. The immediate threat is resolved.</div>',
       4500);
 
-    // Stage 3: Further Investigation
     await stageCard('3', 'Further Investigation',
       'Production is stable. The engineer initiates a deep investigation — choosing Claude Code as the environment.',
       3000);
 
-    // Brief pause to see Slack, then auto-navigate
-    await W(800);
+    await step(800);
     document.body.classList.add('fadeout');
     await W(500);
     window.location.href = 'claude-code.html';
@@ -598,27 +663,22 @@ async function runDemo() {
   } else {
     // ═══════ PART 2: Return from Claude Code ═══════
 
-    // Stage 7: Fix Applied
     await stageCard('7', 'Fix Applied → Full Rollout',
       'The fix is merged. The agent resumes the gradual rollout pipeline, monitoring all the way to 100%.',
       3000);
 
-    // Auto-show FT deactivation
-    await W(800);
+    await step(800);
     document.getElementById('fixMsg').classList.add('show');
     scrollBottom(document.getElementById('channelMessages'));
 
-    await W(1500);
-    // Everything green
+    await step(1500);
     goGreen();
 
-    await W(2000);
-    // Show CI Notifier
+    await step(2000);
     showView('ci');
     document.getElementById('ciBadge').style.display = 'none';
 
-    await W(3000);
-    // Back to channel + metrics
+    await step(3000);
     showView('channel');
     document.getElementById('metricsMsg').classList.add('show');
     scrollBottom(document.getElementById('channelMessages'));
