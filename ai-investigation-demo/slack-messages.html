@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slack Messages</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #1a1d21;
+    color: #d1d2d3;
+    font-size: 15px;
+    line-height: 1.46;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .slack-container {
+    max-width: 780px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #7a7b7e;
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+
+  .message-group {
+    margin-bottom: 48px;
+  }
+
+  /* ── Slack Message ── */
+  .slack-msg {
+    display: flex;
+    gap: 8px;
+    padding: 8px 20px;
+    position: relative;
+  }
+
+  .slack-msg:hover {
+    background: rgba(255,255,255,0.02);
+  }
+
+  .slack-msg .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 900;
+    color: #fff;
+  }
+
+  .avatar-opsgenie { background: #2684ff; }
+  .avatar-db-alert { background: #1a1d21; border: 2px solid #444; font-size: 16px; }
+  .avatar-wix { background: #fff; }
+
+  .avatar-wix img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .msg-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .msg-header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+
+  .msg-author {
+    font-weight: 900;
+    color: #e8e8e9;
+    font-size: 15px;
+  }
+
+  .msg-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0px 4px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.08);
+    color: #9b9c9e;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+  }
+
+  .msg-time {
+    font-size: 12px;
+    color: #7a7b7e;
+  }
+
+  .msg-text {
+    color: #d1d2d3;
+    font-size: 15px;
+    line-height: 1.46;
+  }
+
+  .msg-text p {
+    margin-bottom: 4px;
+  }
+
+  /* ── Alert Link ── */
+  .alert-link {
+    color: #1d9bd1;
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .alert-link:hover {
+    text-decoration: underline;
+  }
+
+  /* ── Opsgenie-style attachment ── */
+  .attachment {
+    border-left: 4px solid #e01e5a;
+    margin: 6px 0;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .attachment-blue {
+    border-left-color: #2684ff;
+  }
+
+  .attachment-green {
+    border-left-color: #2eb67d;
+  }
+
+  .attachment-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 24px;
+    margin: 8px 0;
+  }
+
+  .field-label {
+    font-weight: 700;
+    font-size: 14px;
+    color: #e8e8e9;
+    margin-bottom: 2px;
+  }
+
+  .field-value {
+    font-size: 14px;
+    color: #b5b6b8;
+    line-height: 1.5;
+  }
+
+  .show-more {
+    color: #1d9bd1;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .show-more:hover {
+    text-decoration: underline;
+  }
+
+  /* ── Quoted block (for AI Assistant) ── */
+  .quote-block {
+    border-left: 4px solid #d1d2d3;
+    padding: 4px 12px;
+    margin: 6px 0;
+    color: #b5b6b8;
+  }
+
+  .quote-block strong {
+    color: #e8e8e9;
+  }
+
+  /* ── Buttons ── */
+  .slack-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .slack-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid #565759;
+    background: transparent;
+    color: #d1d2d3;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .slack-btn:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: #8b8c8f;
+  }
+
+  .slack-btn-primary {
+    background: #007a5a;
+    border-color: #007a5a;
+    color: #fff;
+  }
+
+  .slack-btn-primary:hover {
+    background: #148567;
+    border-color: #148567;
+  }
+
+  /* ── Thread reply bar ── */
+  .thread-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    padding: 4px 0;
+    cursor: pointer;
+  }
+
+  .thread-bar .thread-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    background: #007a5a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 900;
+    color: #fff;
+  }
+
+  .thread-bar .thread-text {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1d9bd1;
+  }
+
+  .thread-bar .thread-time {
+    font-size: 12px;
+    color: #7a7b7e;
+  }
+
+  /* ── Emoji ── */
+  .emoji {
+    font-size: 16px;
+    vertical-align: middle;
+  }
+
+  /* ── Separator ── */
+  .day-separator {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0 16px;
+    padding: 0 20px;
+  }
+
+  .day-separator::before,
+  .day-separator::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #3a3b3d;
+  }
+
+  .day-separator span {
+    font-size: 12px;
+    font-weight: 700;
+    color: #e8e8e9;
+    background: #1a1d21;
+    padding: 4px 16px;
+    border: 1px solid #3a3b3d;
+    border-radius: 24px;
+    white-space: nowrap;
+  }
+
+  /* ── Wix logo SVG placeholder ── */
+  .wix-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #0C6EFC, #5B2EFF);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+  }
+
+  .db-emoji {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .bold { font-weight: 700; color: #e8e8e9; }
+  .muted { color: #7a7b7e; }
+  .code {
+    padding: 1px 4px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 3px;
+    font-family: Monaco, 'Courier New', monospace;
+    font-size: 12px;
+    color: #e01e5a;
+  }
+</style>
+</head>
+<body>
+
+<div class="slack-container">
+
+  <!-- ==================== MESSAGE 1: DB Alert Bot ==================== -->
+  <div class="label">Message 1 — DB Alert Bot (screenshot this)</div>
+  <div class="message-group" id="msg1">
+    <div class="day-separator">
+      <span>Today</span>
+    </div>
+
+    <div class="slack-msg">
+      <div class="avatar avatar-db-alert">
+        <span class="db-emoji">🛢️</span>
+      </div>
+      <div class="msg-content">
+        <div class="msg-header">
+          <span class="msg-author">DB Alert Bot</span>
+          <span class="msg-badge">APP</span>
+          <span class="msg-time">Today at 10:45 AM</span>
+        </div>
+
+        <div class="msg-text">
+          <p><span class="emoji">🚨</span> <span class="bold">ALERT: High latency detected on <span class="code">bookings_index</span> in prod-db-3.</span></p>
+          <p style="margin-top: 2px;">Investigation started.</p>
+        </div>
+
+        <div class="attachment" style="margin-top: 10px; border-left-color: #e01e5a;">
+          <div class="attachment-fields">
+            <div>
+              <div class="field-label">Service</div>
+              <div class="field-value">com.wixpress.bookings.attendance<br/>.bookings-attendance</div>
+            </div>
+            <div>
+              <div class="field-label">Endpoint</div>
+              <div class="field-value">DeleteAttendance</div>
+            </div>
+            <div>
+              <div class="field-label">Priority</div>
+              <div class="field-value" style="color: #e01e5a; font-weight: 700;">P1</div>
+            </div>
+            <div>
+              <div class="field-label">Error Rate</div>
+              <div class="field-value">4.2% DEADLINE_EXCEEDED<br/><span class="muted">(baseline: 0.1%)</span></div>
+            </div>
+            <div>
+              <div class="field-label">P95 Latency</div>
+              <div class="field-value" style="color: #e01e5a; font-weight: 700;">8.5s <span class="muted" style="font-weight: 400;">(baseline: ~120ms)</span></div>
+            </div>
+            <div>
+              <div class="field-label">Cluster</div>
+              <div class="field-value">bookings_platform</div>
+            </div>
+          </div>
+
+          <div style="margin-top: 6px;">
+            <div class="field-label" style="font-size: 13px;">Routed Teams</div>
+            <div class="field-value">Bookings_Platform, Bookings_Core</div>
+          </div>
+        </div>
+
+        <div class="thread-bar">
+          <div class="thread-avatar" style="background: linear-gradient(135deg, #0C6EFC, #5B2EFF);">
+            <span style="font-size: 9px; font-weight: 900;">Wix</span>
+          </div>
+          <span class="thread-text">1 reply</span>
+          <span class="thread-time">2 minutes ago</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MESSAGE 2: Wix AI Assistant ==================== -->
+  <div class="label">Message 2 — Wix AI Assistant (screenshot this)</div>
+  <div class="message-group" id="msg2">
+    <div class="slack-msg">
+      <div class="wix-logo">Wix</div>
+      <div class="msg-content">
+        <div class="msg-header">
+          <span class="msg-author">Wix AI Assistant</span>
+          <span class="msg-badge">APP</span>
+          <span class="msg-time">Today at 10:45 AM</span>
+        </div>
+
+        <div class="quote-block">
+          <p><strong>Investigation Summary:</strong> Recent degradation in artifact <span class="code">com.wixpress.bookings.attendance.bookings-attendance</span> endpoint: <strong>DeleteAttendance</strong> seems to be related to feature toggle <span class="code">useDataLocality</span>.</p>
+          <p style="margin-top: 8px;"><strong>Immediate Remediation:</strong> Deactivating Feature toggle <span class="code">useDataLocality</span></p>
+        </div>
+
+        <div class="slack-buttons">
+          <button class="slack-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Investigate with Cursor
+          </button>
+          <button class="slack-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+            Investigate with Claude Code
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== COMBINED (both together) ==================== -->
+  <div class="label">Combined — Both messages together (screenshot this for full view)</div>
+  <div class="message-group" id="combined" style="background: #1a1d21; border-radius: 8px; padding: 8px 0;">
+    <div class="day-separator">
+      <span>Today</span>
+    </div>
+
+    <div class="slack-msg">
+      <div class="avatar avatar-db-alert">
+        <span class="db-emoji">🛢️</span>
+      </div>
+      <div class="msg-content">
+        <div class="msg-header">
+          <span class="msg-author">DB Alert Bot</span>
+          <span class="msg-badge">APP</span>
+          <span class="msg-time">Today at 10:45 AM</span>
+        </div>
+
+        <div class="msg-text">
+          <p><span class="emoji">🚨</span> <span class="bold">ALERT: High latency detected on <span class="code">bookings_index</span> in prod-db-3.</span></p>
+          <p style="margin-top: 2px;">Investigation started.</p>
+        </div>
+
+        <div class="attachment" style="margin-top: 10px; border-left-color: #e01e5a;">
+          <div class="attachment-fields">
+            <div>
+              <div class="field-label">Service</div>
+              <div class="field-value">com.wixpress.bookings.attendance<br/>.bookings-attendance</div>
+            </div>
+            <div>
+              <div class="field-label">Endpoint</div>
+              <div class="field-value">DeleteAttendance</div>
+            </div>
+            <div>
+              <div class="field-label">Priority</div>
+              <div class="field-value" style="color: #e01e5a; font-weight: 700;">P1</div>
+            </div>
+            <div>
+              <div class="field-label">Error Rate</div>
+              <div class="field-value">4.2% DEADLINE_EXCEEDED<br/><span class="muted">(baseline: 0.1%)</span></div>
+            </div>
+            <div>
+              <div class="field-label">P95 Latency</div>
+              <div class="field-value" style="color: #e01e5a; font-weight: 700;">8.5s <span class="muted" style="font-weight: 400;">(baseline: ~120ms)</span></div>
+            </div>
+            <div>
+              <div class="field-label">Cluster</div>
+              <div class="field-value">bookings_platform</div>
+            </div>
+          </div>
+          <div style="margin-top: 6px;">
+            <div class="field-label" style="font-size: 13px;">Routed Teams</div>
+            <div class="field-value">Bookings_Platform, Bookings_Core</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slack-msg" style="margin-top: 12px;">
+      <div class="wix-logo">Wix</div>
+      <div class="msg-content">
+        <div class="msg-header">
+          <span class="msg-author">Wix AI Assistant</span>
+          <span class="msg-badge">APP</span>
+          <span class="msg-time">Today at 10:45 AM</span>
+        </div>
+
+        <div class="quote-block">
+          <p><strong>Investigation Summary:</strong> Recent degradation in artifact <span class="code">com.wixpress.bookings.attendance.bookings-attendance</span> endpoint: <strong>DeleteAttendance</strong> seems to be related to feature toggle <span class="code">useDataLocality</span>.</p>
+          <p style="margin-top: 8px;"><strong>Immediate Remediation:</strong> Deactivating Feature toggle <span class="code">useDataLocality</span></p>
+        </div>
+
+        <div class="slack-buttons">
+          <button class="slack-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Investigate with Cursor
+          </button>
+          <button class="slack-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+            Investigate with Claude Code
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
