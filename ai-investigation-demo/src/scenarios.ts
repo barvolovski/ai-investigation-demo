@@ -26,8 +26,8 @@ export const scenarios: Scenario[] = [
             output: `Channel found: #bookings-urgent (C04N8QXYZ)
 Last alert: 10:45 AM today
 
-🚨 DB Alert Bot:
-  ALERT: High latency detected on 'bookings_index' in prod-db-3.
+🚨 Opsgenie:
+  ALERT: SLO error rate on propertyListing — com.wixpress.bookings-real-estate-webapp
   Investigation started.
 
   Wix AI Assistant:
