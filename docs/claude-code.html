@@ -19,7 +19,7 @@ body{animation:fadeIn .5s ease}
 
 /* ── TERMINAL VIEWPORT ── */
 .vp{flex:1;overflow:hidden;position:relative}
-.sw{position:absolute;top:0;left:0;right:0;padding:20px 28px 350px;will-change:transform}
+.sw{position:absolute;top:0;left:0;right:0;padding:20px 28px 200px;will-change:transform}
 
 /* ── STATUSBAR ── */
 .sb{height:26px;background:#1c1c1c;border-top:1px solid #2a2a2a;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:10.5px;color:#555;flex-shrink:0;letter-spacing:.2px}
@@ -109,6 +109,15 @@ body{animation:fadeIn .5s ease}
 .sd:nth-child(2){animation-delay:.15s}.sd:nth-child(3){animation-delay:.3s}
 @keyframes pls{0%,100%{opacity:.15}50%{opacity:1}}
 
+/* ── CLAUDE LOGO ── */
+.claude-logo{display:inline-flex;align-items:center;gap:8px;margin-right:10px}
+.claude-logo svg{width:28px;height:28px}
+
+/* ── PROMPT BOX ── */
+.prompt-box{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:14px 18px;margin:10px 0 16px;position:relative}
+.prompt-box::before{content:'USER PROMPT';position:absolute;top:-9px;left:14px;background:#000;padding:0 8px;font-size:9px;letter-spacing:1px;color:#555;font-weight:700}
+.prompt-box .ptxt{color:#d4d4d4;line-height:1.6;font-size:13.5px}
+
 /* ── MODE TOGGLE ── */
 .mode-toggle{position:fixed;bottom:20px;right:20px;z-index:1100;display:flex;align-items:center;gap:10px;background:rgba(30,30,30,.92);border:1px solid #444;border-radius:28px;padding:6px 8px 6px 14px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;color:#ccc;cursor:pointer;backdrop-filter:blur(6px);box-shadow:0 4px 20px rgba(0,0,0,.4);user-select:none;transition:opacity .3s}
 .mode-toggle:hover{border-color:#888}
@@ -123,7 +132,7 @@ body{animation:fadeIn .5s ease}
 
 <div class="tb">
   <div class="dots"><span class="dr"></span><span class="dy"></span><span class="dg"></span></div>
-  <div class="tb-t">Claude Code v2.1.44 · Opus 4.6 - Claude Team · ~/projects/scheduler</div>
+  <div class="tb-t"><span class="claude-logo"><svg viewBox="0 0 24 24" fill="none"><path d="M16.604 8.516c-.253-.596-.768-1.072-1.39-1.072-.186 0-.372.04-.544.12l-3.39 1.584L7.89 7.564c-.172-.08-.358-.12-.544-.12-.622 0-1.137.476-1.39 1.072L4.014 13.01c-.147.345-.214.713-.214 1.084 0 1.545 1.265 2.906 2.81 2.906.45 0 .893-.11 1.297-.327l3.093-1.66 3.093 1.66c.404.217.847.327 1.297.327 1.545 0 2.81-1.361 2.81-2.906 0-.371-.067-.739-.214-1.084l-1.942-4.494z" fill="#D97757"/></svg></span>Claude Code v2.1.44 · Opus 4.6 · Claude Team · ~/projects/scheduler</div>
 </div>
 
 <div class="vp" id="vp">
@@ -139,13 +148,12 @@ body{animation:fadeIn .5s ease}
 <span class="star">╰──────────────────────────────────────────────────────╯</span></div>
 
 <!-- ═══════ PROMPT ═══════ -->
-<div class="blk prompt" id="B1">
-  <span class="caret">❯</span>
+<div class="blk prompt-box" id="B1">
   <span class="ptxt" id="ptxt"></span><span class="cursor" id="pcur"></span>
 </div>
 
 <!-- ═══════ STEP 1: ALERT TRIAGE ═══════ -->
-<div class="blk" id="B_1hdr" style="color:#d4d4d4;font-weight:700;margin:6px 0 4px">● Investigating Alert on <span class="cy">bookings-attendance</span> — <span class="cy">DeleteAttendance</span> endpoint</div>
+<div class="blk" id="B_1hdr" style="color:#d4d4d4;font-weight:700;margin:6px 0 4px">● Investigating Alert on <span class="cy">bookings-real-estate-webapp</span> — <span class="cy">propertyListing</span> endpoint</div>
 
 <div class="blk think" id="B_1t">
   <div class="think-bd" style="padding-left:2px;font-style:normal;color:#aaa">An alert just fired on #bookings-urgent. Let me pull it up and start triaging.</div>
@@ -155,18 +163,18 @@ body{animation:fadeIn .5s ease}
   <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">Find Channel Id</span> <span class="tool-lb">(MCP)</span><span class="d">(channelName: "bookings-urgent")</span></div>
   <div class="tool-out"><span class="bar">⎿ </span>Channel: #bookings-urgent (C04N8QXYZ) · Last alert: 10:45 AM
 <span class="bar">  </span>
-<span class="bar">  </span><span class="r bold">🚨 DB Alert Bot:</span>
+<span class="bar">  </span><span class="r bold">🚨 Opsgenie:</span>
 <span class="bar">  </span>  ALERT: High latency on <span class="cy">'bookings_index'</span> in prod-db-3
 <span class="bar">  </span>
 <span class="bar">  </span><span class="b bold">Wix Maintenance Assistant:</span>
-<span class="bar">  </span>  Degradation in <span class="cy">DeleteAttendance</span> → feature toggle <span class="y">useDataLocality</span>
+<span class="bar">  </span>  Degradation in <span class="cy">propertyListing</span> → feature toggle <span class="y">usePropertyListing</span>
 <span class="bar">  </span>  Immediate Remediation: Deactivating FT</div>
 </div>
 
 <div class="blk tool" id="B_1b">
-  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">get_service_ownership</span> <span class="tool-lb">(MCP)</span><span class="d">(serviceName: "com.wixpress.bookings.attendance.bookings-attendance")</span></div>
-  <div class="tool-out"><span class="bar">⎿ </span>Service: <span class="cy">bookings-attendance</span>
-<span class="bar">  </span>Artifact: com.wixpress.bookings.attendance.bookings-attendance
+  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">get_service_ownership</span> <span class="tool-lb">(MCP)</span><span class="d">(serviceName: "com.wixpress.bookings-real-estate-webapp")</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>Service: <span class="cy">bookings-real-estate-webapp</span>
+<span class="bar">  </span>Artifact: com.wixpress.bookings-real-estate-webapp
 <span class="bar">  </span>Owner Team: <span class="bold">bookings-core</span>
 <span class="bar">  </span>Main Contact: galgetz@wix.com
 <span class="bar">  </span>Slack: #bookings-core-urgent
@@ -175,18 +183,18 @@ body{animation:fadeIn .5s ease}
 </div>
 
 <div class="blk tool" id="B_1c">
-  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">get_rollout_history</span> <span class="tool-lb">(MCP)</span><span class="d">(artifactId: "bookings-attendance", groupId: "com.wix.bookings.attendance", limit: 5)</span></div>
-  <div class="tool-out"><span class="bar">⎿ </span>v1.7082.0 │ Feb 11 │ <span class="y">Added validation to reject slot booking</span>  │ <span class="o">orst</span>
-<span class="bar">  </span>          │        │ <span class="y">for course service with feature toggle</span>  │
+  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">get_rollout_history</span> <span class="tool-lb">(MCP)</span><span class="d">(artifactId: "bookings-real-estate-webapp", groupId: "com.wixpress.bookings", limit: 5)</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>v1.7082.0 │ Feb 11 │ <span class="y">Added criteria filtering to property listings</span>  │ <span class="o">orst</span>
+<span class="bar">  </span>          │        │ <span class="y">with feature toggle for new search path</span>  │
 <span class="bar">  </span>v1.7081.0 │ Feb 8  │ Bump dependencies                       │ ci-bot
-<span class="bar">  </span>v1.7080.0 │ Feb 5  │ Fix attendance count for recurring       │ maorye
-<span class="bar">  </span>v1.7079.0 │ Feb 2  │ <span class="y">Add useDataLocality feature toggle</span>      │ <span class="o">orst</span>
+<span class="bar">  </span>v1.7080.0 │ Feb 5  │ Fix listing count for recurring bookings       │ maorye
+<span class="bar">  </span>v1.7079.0 │ Feb 2  │ <span class="y">Add usePropertyListing feature toggle</span>      │ <span class="o">orst</span>
 <span class="bar">  </span>
 <span class="bar">  </span><span class="y">⚠</span> v1.7082.0 deployed Feb 11 — gradual rollout completed by 13:47 UTC</div>
 </div>
 
 <div class="blk find" id="B_1f">
-  <span class="y">⚑</span> Alert 10:45 AM. Owned by <span class="bold">bookings-core</span> (galgetz@wix.com). Last deploy: <span class="o bold">v1.7082.0</span> on Feb 11 by <span class="o">galgetz</span> — "Added validation to reject slot booking for course service".
+  <span class="y">⚑</span> Alert 10:45 AM. Owned by <span class="bold">bookings-core</span> (galgetz@wix.com). Last deploy: <span class="o bold">v1.7082.0</span> on Feb 11 by <span class="o">galgetz</span> — "Added criteria filtering to property listings for course service".
 </div>
 
 <!-- ═══════ STEP 2: METRICS ═══════ -->
@@ -196,38 +204,38 @@ body{animation:fadeIn .5s ease}
 
 <div class="blk tool" id="B_2a">
   <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">query_prometheus</span> <span class="tool-lb">(MCP)</span><span class="d">(expr: "sum by (rpc_method, grpc_status)(...)")</span></div>
-  <div class="tool-out"><span class="bar">⎿ </span>DeleteAttendance │ <span class="r">DEADLINE_EXCEEDED</span> │ <span class="r bold">1,847</span>
-<span class="bar">  </span>DeleteAttendance │ INTERNAL          │ 23
-<span class="bar">  </span>GetAttendance    │ OK                │ normal
-<span class="bar">  </span>SetAttendance    │ OK                │ normal
-<span class="bar">  </span><span class="y">⚠</span> DeleteAttendance: <span class="r bold">4.2% error rate</span> (baseline: 0.1%)</div>
+  <div class="tool-out"><span class="bar">⎿ </span>propertyListing │ <span class="r">DEADLINE_EXCEEDED</span> │ <span class="r bold">1,847</span>
+<span class="bar">  </span>propertyListing │ INTERNAL          │ 23
+<span class="bar">  </span>getPropertyDetails │ OK                │ normal
+<span class="bar">  </span>searchListings     │ OK                │ normal
+<span class="bar">  </span><span class="y">⚠</span> propertyListing: <span class="r bold">4.2% error rate</span> (baseline: 0.1%)</div>
 </div>
 
 <div class="blk tool" id="B_2b">
   <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">query_prometheus</span> <span class="tool-lb">(MCP)</span><span class="d">(expr: "histogram_quantile(0.95, ...)")</span></div>
-  <div class="tool-out"><span class="bar">⎿ </span>DeleteAttendance │ <span class="r bold">8.5s</span>  │ ~120ms │ <span class="r bold">🔴 70x degradation</span>
-<span class="bar">  </span>GetAttendance    │ 45ms  │ ~40ms  │ <span class="g">✓ OK</span>
-<span class="bar">  </span>SetAttendance    │ 89ms  │ ~80ms  │ <span class="g">✓ OK</span>
-<span class="bar">  </span>ListAttendance   │ 110ms │ ~95ms  │ <span class="g">✓ OK</span>
+  <div class="tool-out"><span class="bar">⎿ </span>propertyListing │ <span class="r bold">8.5s</span>  │ ~120ms │ <span class="r bold">🔴 70x degradation</span>
+<span class="bar">  </span>getPropertyDetails │ 45ms  │ ~40ms  │ <span class="g">✓ OK</span>
+<span class="bar">  </span>searchListings     │ 89ms  │ ~80ms  │ <span class="g">✓ OK</span>
+<span class="bar">  </span>listFavorites      │ 110ms │ ~95ms  │ <span class="g">✓ OK</span>
 <span class="bar">  </span>
-<span class="bar">  </span><span class="r bold">🔴 DeleteAttendance: 8.5s P95 — 70x degradation from baseline</span></div>
+<span class="bar">  </span><span class="r bold">🔴 propertyListing: 8.5s P95 — 70x degradation from baseline</span></div>
 </div>
 
 <div class="blk tool" id="B_2c">
   <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">query_app_logs</span> <span class="tool-lb">(MCP)</span><span class="d">(sql: "SELECT ... WHERE level='ERROR' LIMIT 50")</span></div>
   <div class="tool-out"><span class="bar">⎿ </span>Found <span class="r bold">847 ERROR</span> entries (last 7h)
 <span class="bar">  </span>Pattern: <span class="r">DeadlineExceededException</span>
-<span class="bar">  </span>"Query exceeded 5000ms on attendance table"
-<span class="bar">  </span>→ deleteBySessionId → SDL.delete → <span class="y">MySQL timeout (5000ms)</span></div>
+<span class="bar">  </span>"Query exceeded 5000ms on property_listings table"
+<span class="bar">  </span>→ findPropertyListingsId → SDL.query → <span class="y">MySQL timeout (5000ms)</span></div>
 </div>
 
 <div class="blk tool" id="B_2d">
-  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">list_bindings</span> <span class="tool-lb">(MCP)</span><span class="d">(artifactId: "bookings-attendance")</span></div>
-  <div class="tool-out"><span class="bar">⎿ </span>Cluster: <span class="cy">bookings_platform</span> │ DB: attendance │ MySQL │ SDL</div>
+  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">list_bindings</span> <span class="tool-lb">(MCP)</span><span class="d">(artifactId: "bookings-real-estate-webapp")</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>Cluster: <span class="cy">bookings_platform</span> │ DB: real_estate │ MySQL │ SDL</div>
 </div>
 
 <div class="blk find crit" id="B_2f">
-  <span class="r bold">⚑</span> Only DeleteAttendance affected — <span class="r bold">8.5s P95</span> (70x). Logs: SDL.delete → MySQL timeout on attendance table.
+  <span class="r bold">⚑</span> Only propertyListing affected — <span class="r bold">8.5s P95</span> (70x). Logs: SDL.query → MySQL timeout on property_listings table.
 </div>
 
 <!-- ═══════ STEP 3: DB DEEP DIVE ═══════ -->
@@ -237,25 +245,25 @@ body{animation:fadeIn .5s ease}
 
 <div class="blk tool" id="B_3a">
   <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">list_cluster_tables</span> <span class="tool-lb">(MCP)</span><span class="d">(cluster: "bookings_platform")</span></div>
-  <div class="tool-out"><span class="bar">⎿ </span>attendance          │ 27,531,842  │ 21.2 GB
-<span class="bar">  </span>attendance_platform │ <span class="r bold">40,377,394</span>  │ <span class="r bold">29.2 GB</span>
-<span class="bar">  </span><span class="y">⚠</span> attendance_platform: <span class="r">40M rows / 29.2 GB</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>listings            │ 27,531,842  │ 21.2 GB
+<span class="bar">  </span>property_listings │ <span class="r bold">40,377,394</span>  │ <span class="r bold">29.2 GB</span>
+<span class="bar">  </span><span class="y">⚠</span> property_listings: <span class="r">40M rows / 29.2 GB</span></div>
 </div>
 
 <div class="blk tool" id="B_3b">
-  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">get_schema_analysis</span> <span class="tool-lb">(MCP)</span><span class="d">(table: "attendance_platform")</span></div>
+  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">get_schema_analysis</span> <span class="tool-lb">(MCP)</span><span class="d">(table: "property_listings")</span></div>
   <div class="tool-out"><span class="bar">⎿ </span>PK: (tenant_id, entity_id)
 <span class="bar">  </span>
 <span class="bar">  </span>Indexes:
-<span class="bar">  </span>  bookingId_idx   → (tenant_id, bookingId)
-<span class="bar">  </span>  <span class="y bold">sessionId_h_idx</span> → (tenant_id, sessionId_h) ← <span class="y">hash-based!</span>
-<span class="bar">  </span>  eventId_h_idx   → (tenant_id, eventId_h)
+<span class="bar">  </span>  regionId_idx   → (tenant_id, regionId)
+<span class="bar">  </span>  <span class="y bold">listingId_h_idx</span> → (tenant_id, listingId_h) ← <span class="y">hash-based!</span>
+<span class="bar">  </span>  categoryId_h_idx   → (tenant_id, categoryId_h)
 <span class="bar">  </span>
-<span class="bar">  </span>sessionId stored as <span class="p">HashedString</span>:
-<span class="bar">  </span>  ├── sessionId.<span class="g">s</span> → raw string value
-<span class="bar">  </span>  └── sessionId.<span class="o">h</span> → integer hash <span class="y">(used by index!)</span>
+<span class="bar">  </span>listingId stored as <span class="p">HashedString</span>:
+<span class="bar">  </span>  ├── listingId.<span class="g">s</span> → raw string value
+<span class="bar">  </span>  └── listingId.<span class="o">h</span> → integer hash <span class="y">(used by index!)</span>
 <span class="bar">  </span>
-<span class="bar">  </span><span class="y bold">⚠ sessionId_h_idx indexes the HASH (int), NOT the raw string.</span>
+<span class="bar">  </span><span class="y bold">⚠ listingId_h_idx indexes the HASH (int), NOT the raw string.</span>
 <span class="bar">  </span><span class="y bold">  If delete filters on .s instead of .h → index bypassed!</span></div>
 </div>
 
@@ -269,13 +277,13 @@ body{animation:fadeIn .5s ease}
 </div>
 
 <div class="blk tool" id="B_4a">
-  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">explain_sql_query</span> <span class="tool-lb">(MCP)</span><span class="d">(sql: "DELETE FROM ... WHERE sessionId_h = ?")</span></div>
+  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">explain_sql_query</span> <span class="tool-lb">(MCP)</span><span class="d">(sql: "DELETE FROM ... WHERE listingId_h = ?")</span></div>
   <div class="tool-out"><span class="bar">⎿ </span>EXPLAIN — Indexed Query <span class="g">✓</span>
-<span class="bar">  </span>Access: ref │ Key: <span class="g bold">sessionId_h_idx</span> │ Rows: <span class="g bold">1</span> │ Cost: <span class="g bold">0.35</span></div>
+<span class="bar">  </span>Access: ref │ Key: <span class="g bold">listingId_h_idx</span> │ Rows: <span class="g bold">1</span> │ Cost: <span class="g bold">0.35</span></div>
 </div>
 
 <div class="blk tool" id="B_4b">
-  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">explain_sql_query</span> <span class="tool-lb">(MCP)</span><span class="d">(sql: "DELETE FROM ... WHERE JSON_EXTRACT(sessionId, '$.s') = ?")</span></div>
+  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">explain_sql_query</span> <span class="tool-lb">(MCP)</span><span class="d">(sql: "DELETE FROM ... WHERE JSON_EXTRACT(listingId, '$.s') = ?")</span></div>
   <div class="tool-out"><span class="bar">⎿ </span>EXPLAIN — Unindexed Query <span class="r">🔴</span>
 <span class="bar">  </span>Access: <span class="r bold">ALL</span> │ Key: <span class="r">(none)</span> │ Rows: <span class="r bold">40,377,394</span> │ Cost: <span class="r bold">4,930,313</span>
 <span class="bar">  </span>
@@ -293,30 +301,30 @@ body{animation:fadeIn .5s ease}
 </div>
 
 <div class="blk tool" id="B_5a">
-  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">find_commits_by_date_range</span> <span class="tool-lb">(MCP)</span><span class="d">(artifactId: "bookings-attendance", from: "2025-02-01", to: "2025-02-17")</span></div>
+  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">server-infra</span> <span class="d">-</span> <span class="bold" style="color:#aaa">find_commits_by_date_range</span> <span class="tool-lb">(MCP)</span><span class="d">(artifactId: "bookings-real-estate-webapp", from: "2025-02-01", to: "2025-02-17")</span></div>
   <div class="tool-out"><span class="bar">⎿ </span>d0398f8 Feb 17 "align categories docs" (Omer M.)
-<span class="bar">  </span><span class="o bold">a1b2c3d Feb 11 "reject slot booking for course + FT" (orst) ← v1.7082.0</span>
+<span class="bar">  </span><span class="o bold">a1b2c3d Feb 11 "criteria filtering for property listings + FT" (orst) ← v1.7082.0</span>
 <span class="bar">  </span>9f8e7d6 Feb 8  "Bump deps" (ci-bot)
-<span class="bar">  </span>1a2b3c4 Feb 2  <span class="y">"Add useDataLocality toggle"</span> (orst)</div>
+<span class="bar">  </span>1a2b3c4 Feb 2  <span class="y">"Add usePropertyListing toggle"</span> (orst)</div>
 </div>
 
 <div class="blk tool" id="B_5b">
-  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">Bash</span><span class="d">(rg "deleteBySession" --type scala -C 8)</span></div>
-  <div class="tool-out"><span class="bar">⎿ </span>Found in <span class="cy bold">AttendanceDeleteHandler.scala</span>:
+  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm">Bash</span><span class="d">(rg "findPropertyListings" --type scala -C 8)</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>Found in <span class="cy bold">PropertyListingHandler.scala</span>:
 <span class="bar">  </span>
 <span class="bar">  </span><span class="d">// OLD PATH (before v1.7082.0):</span>
-<span class="bar">  </span><span class="p">def</span> <span class="b">deleteBySession</span>(tenantId, sessionId) = {
-<span class="bar">  </span>  <span class="p">val</span> hash = HashedString.hash(sessionId)
-<span class="bar">  </span>  sdlClient.delete(<span class="g">"attendance_platform"</span>,
+<span class="bar">  </span><span class="p">def</span> <span class="b">findPropertyListings</span>(tenantId, listingId) = {
+<span class="bar">  </span>  <span class="p">val</span> hash = HashedString.hash(listingId)
+<span class="bar">  </span>  sdlClient.query(<span class="g">"property_listings"</span>,
 <span class="bar">  </span>    Query.eq(<span class="g">"tenant_id"</span>, tenantId)
-<span class="bar">  </span>      .and(Query.eq(<span class="g">"sessionId_h"</span>, hash)) <span class="g">// ✓ uses index</span>
+<span class="bar">  </span>      .and(Query.eq(<span class="g">"listingId_h"</span>, hash)) <span class="g">// ✓ uses index</span>
 <span class="bar">  </span>  )
 <span class="bar">  </span>}
 <span class="bar">  </span>
 <span class="bar">  </span><span class="d">// NEW PATH (v1.7082.0) ← THE BUG:</span>
-<span class="bar">  </span><span class="p">def</span> <span class="r bold">deleteBySessionForCourse</span>(tenantId, sessionId) = {
-<span class="bar">  </span>  sdlClient.delete(<span class="g">"attendance_platform"</span>,
-<span class="bar">  </span>    Query.jsonExtract(<span class="g">"sessionId.s"</span>, sessionId) <span class="r bold">// 🔴 RAW STRING!</span>
+<span class="bar">  </span><span class="p">def</span> <span class="r bold">findPropertyListingsByCriteria</span>(tenantId, listingId) = {
+<span class="bar">  </span>  sdlClient.query(<span class="g">"property_listings"</span>,
+<span class="bar">  </span>    Query.jsonExtract(<span class="g">"listingId.s"</span>, listingId) <span class="r bold">// 🔴 RAW STRING!</span>
 <span class="bar">  </span>    <span class="d">// ✗ Missing: tenant_id filter</span>
 <span class="bar">  </span>    <span class="d">// ✗ Missing: hash-based lookup</span>
 <span class="bar">  </span>  )
@@ -324,37 +332,37 @@ body{animation:fadeIn .5s ease}
 </div>
 
 <div class="blk find crit" id="B_5f">
-  <span class="r bold">⚑ ROOT CAUSE:</span> v1.7082.0 added <span class="r bold">deleteBySessionForCourse()</span> — queries raw <span class="g">sessionId.s</span> via JSON_EXTRACT. No hash, no tenant_id → 40M row scan every call.
+  <span class="r bold">⚑ ROOT CAUSE:</span> v1.7082.0 added <span class="r bold">findPropertyListingsByCriteria()</span> — queries raw <span class="g">listingId.s</span> via JSON_EXTRACT. No hash, no tenant_id → 40M row scan every call.
 </div>
 
 <!-- ═══════ CONCLUSION (Claude's response text) ═══════ -->
 <div class="blk resp zoomable" id="B_conclusion">
 <strong style="color:#ff9e64;font-size:14px">Root Cause Identified</strong>
 
-<span class="bold">The Feb 11 deployment (v1.7082.0) by orst</span> introduced <code>deleteBySessionForCourse()</code>
-that queries <code>attendance_platform</code> by raw <code>sessionId.s</code> instead of using the
-hash-based index <code>sessionId_h_idx</code>.
+<span class="bold">The Feb 11 deployment (v1.7082.0) by orst</span> introduced <code>findPropertyListingsByCriteria()</code>
+that queries <code>property_listings</code> by raw <code>listingId.s</code> instead of using the
+hash-based index <code>listingId_h_idx</code>.
 
 <strong class="b">Evidence Chain:</strong>
 <span class="etbl"> <span class="hdr">#  Signal      Finding</span>
  1  Deploy      v1.7082.0 — Feb 11, gradual rollout by orst
- 2  Errors      <span class="r">DEADLINE_EXCEEDED</span> on DeleteAttendance, 4.2% error rate
+ 2  Errors      <span class="r">DEADLINE_EXCEEDED</span> on propertyListing, 4.2% error rate
  3  Latency     <span class="r bold">8.5s P95</span> — 70x degradation from 120ms baseline
- 4  Logs        "Query exceeded 5000ms on attendance table"
- 5  Schema      <span class="cy">sessionId_h_idx(tenant_id, sessionId_h)</span> — hash index exists
+ 4  Logs        "Query exceeded 5000ms on property_listings table"
+ 5  Schema      <span class="cy">listingId_h_idx(tenant_id, listingId_h)</span> — hash index exists
  6  EXPLAIN     Full scan: <span class="r">40M rows, cost 4.9M</span> vs indexed: <span class="g">1 row, cost 0.35</span>
- 7  Code        <span class="r">deleteBySessionForCourse()</span> uses JSON_EXTRACT — bypasses index</span>
+ 7  Code        <span class="r">findPropertyListingsByCriteria()</span> uses JSON_EXTRACT — bypasses index</span>
 
 <strong class="b">Immediate Mitigation:</strong>
-Deactivate feature toggle <code>useDataLocality</code> — disables broken code path instantly.
+Deactivate feature toggle <code>usePropertyListing</code> — disables broken code path instantly.
 
 <strong class="b">Permanent Fix:</strong>
 <span class="cblk"><span class="d">// Fix: Use hash-based lookup with tenant_id</span>
-<span class="p">def</span> <span class="b">deleteBySessionForCourse</span>(tenantId: UUID, sessionId: String) = {
-  <span class="p">val</span> hash = HashedString.hash(sessionId)
-  sdlClient.delete(<span class="g">"attendance_platform"</span>,
+<span class="p">def</span> <span class="b">findPropertyListingsByCriteria</span>(tenantId: UUID, listingId: String) = {
+  <span class="p">val</span> hash = HashedString.hash(listingId)
+  sdlClient.query(<span class="g">"property_listings"</span>,
     Query.eq(<span class="g">"tenant_id"</span>, tenantId)
-      .and(Query.eq(<span class="g">"sessionId_h"</span>, hash))
+      .and(Query.eq(<span class="g">"listingId_h"</span>, hash))
   )
 }</span>
 <span class="impact">📉 Query cost: <span class="r" style="color:#f7768e">4,930,313</span> → <span class="g">0.35</span> — 14 million times faster</span>
@@ -366,18 +374,18 @@ Deactivate feature toggle <code>useDataLocality</code> — disables broken code 
 </div>
 
 <div class="blk tool" id="B_6a">
-  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm" style="color:#ff9e64">Explore</span><span class="d">(Find attendance delete code)</span></div>
+  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm" style="color:#ff9e64">Explore</span><span class="d">(Find property listing query code)</span></div>
   <div class="tool-out"><span class="bar">⎿ </span>Done (<span class="bold">27 tool uses</span> · 90.9k tokens · 1m 1s)</div>
 </div>
 
 <div class="blk tool" id="B_6b">
-  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm" style="color:#9ece6a">Update</span><span class="d">(bookings-backend/bookingsV2/bookings-attendance/src/main/scala/...AttendanceDeleteHandler.scala)</span></div>
+  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm" style="color:#9ece6a">Update</span><span class="d">(bookings-backend/bookingsV2/bookings-real-estate-webapp/src/main/scala/...PropertyListingHandler.scala)</span></div>
   <div class="tool-out"><span class="bar">⎿ </span>Added <span class="g bold">9 lines</span>, removed <span class="r">1 line</span></div>
 </div>
 
 <div class="blk tool" id="B_6c">
-  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm" style="color:#7dcfff">Bash</span><span class="d">(gh pr create --title "[bookings-attendance] Fix DeleteAttendance full table scan" --body "..." --base master)</span></div>
-  <div class="tool-out"><span class="bar">⎿ </span>Creating pull request for <span class="cy">fix/attendance-delete-hash-index</span> into master
+  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm" style="color:#7dcfff">Bash</span><span class="d">(gh pr create --title "[real-estate-webapp] Fix propertyListing full table scan" --base master)</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>Creating pull request for <span class="cy">fix/property-listing-hash-index</span> into master
 <span class="bar">  </span>
 <span class="bar">  </span><span class="g bold">✓</span> Pull request created successfully</div>
 </div>
@@ -400,7 +408,7 @@ Deactivate feature toggle <code>useDataLocality</code> — disables broken code 
  9   server-infra · get_schema_analysis   Hash index vs raw string mismatch
  10  server-infra · explain_sql_query     <span class="g">1 row</span> vs <span class="r">40M rows</span> — 14M× diff
  11  server-infra · find_commits_by_date  v1.7082.0 commit by orst
- 12  Bash · rg                            Found buggy deleteBySessionForCourse()
+ 12  Bash · rg                            Found buggy findPropertyListingsByCriteria()
  13  Explore                              Located fix target in source
  14  Update                               Applied hash-based index fix
  15  Bash · gh pr create                  <span class="g">PR #29225 created</span></span>
@@ -412,7 +420,7 @@ Deactivate feature toggle <code>useDataLocality</code> — disables broken code 
 <div style="white-space:normal;line-height:1.8">
 <div style="color:#888;font-size:13px;margin-bottom:16px">Session starts → 3 MCP tools fired in parallel:</div>
 <div style="display:flex;flex-direction:column;gap:14px">
-<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #7aa2f7"><span class="bold" style="color:#7dcfff;font-size:15px">● server-infra — Find Channel Id</span> <span style="color:#555">(MCP)</span><div style="color:#aaa;font-size:13px;margin-top:4px">Alert context from <span class="bold">#bookings-urgent</span> — DB Alert Bot + Wix Maintenance Assistant</div></div>
+<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #7aa2f7"><span class="bold" style="color:#7dcfff;font-size:15px">● server-infra — Find Channel Id</span> <span style="color:#555">(MCP)</span><div style="color:#aaa;font-size:13px;margin-top:4px">Alert context from <span class="bold">#bookings-urgent</span> — Opsgenie + Wix Maintenance Assistant</div></div>
 <div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #7aa2f7"><span class="bold" style="color:#7dcfff;font-size:15px">● server-infra — get_service_ownership</span> <span style="color:#555">(MCP)</span><div style="color:#aaa;font-size:13px;margin-top:4px">Owner: <span class="bold">bookings-core</span> · Contact: <span class="o">galgetz@wix.com</span> · On-call: <span class="o">galgetz@wix.com</span></div></div>
 <div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #e0af68"><span class="bold" style="color:#7dcfff;font-size:15px">● server-infra — get_rollout_history</span> <span style="color:#555">(MCP)</span><div style="color:#aaa;font-size:13px;margin-top:4px">Last deploy: <span class="y bold">v1.7082.0</span> on Feb 11 by <span class="o">galgetz</span> — <span class="y">"reject slot booking + feature toggle"</span></div></div>
 </div>
@@ -425,21 +433,21 @@ Deactivate feature toggle <code>useDataLocality</code> — disables broken code 
 <div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #ff9e64"><span class="bold" style="color:#ff9e64;font-size:14px">Ownership</span><span style="color:#aaa;font-size:13px"> — <span class="bold">bookings-core</span> team · <span class="o">galgetz@wix.com</span> · Urgent: <span class="cy">#bookings-core-urgent</span></span></div>
 <div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #e0af68"><span class="bold" style="color:#ff9e64;font-size:14px">Last Deploy</span><span style="color:#aaa;font-size:13px"> — <span class="y bold">v1.7082.0</span> Feb 11 by orst · Rollout completed 13:47 UTC</span><div style="color:#f7768e;font-size:13px;font-weight:700;margin-top:4px">⚠ Timing aligns with when errors started spiking</div></div>
 <div style="border-top:1px solid #222;margin:4px 0"></div>
-<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #f7768e"><span class="bold" style="color:#7aa2f7;font-size:14px">P95 Latency</span><span style="font-size:13px;color:#aaa"> — DeleteAttendance: </span><span class="r bold" style="font-size:18px">8.5s</span><span style="color:#aaa;font-size:13px"> (baseline ~120ms) = </span><span class="r bold" style="font-size:16px">70× degradation</span></div>
+<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #f7768e"><span class="bold" style="color:#7aa2f7;font-size:14px">P95 Latency</span><span style="font-size:13px;color:#aaa"> — propertyListing: </span><span class="r bold" style="font-size:18px">8.5s</span><span style="color:#aaa;font-size:13px"> (baseline ~120ms) = </span><span class="r bold" style="font-size:16px">70× degradation</span></div>
 <div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #f7768e"><span class="bold" style="color:#7aa2f7;font-size:14px">Error Rate</span><span style="font-size:13px;color:#aaa"> — </span><span class="r bold" style="font-size:15px">4.2%</span><span style="color:#aaa;font-size:13px"> DEADLINE_EXCEEDED (baseline: 0.1%)</span></div>
-<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #e0af68"><span class="bold" style="color:#7aa2f7;font-size:14px">App Logs</span><span style="font-size:13px;color:#aaa"> — </span><span class="y" style="font-size:13px">"Query exceeded 5000ms on attendance table"</span><span style="font-size:13px;color:#555"> → SDL.delete → MySQL timeout</span></div>
+<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #e0af68"><span class="bold" style="color:#7aa2f7;font-size:14px">App Logs</span><span style="font-size:13px;color:#aaa"> — </span><span class="y" style="font-size:13px">"Query exceeded 5000ms on property_listings table"</span><span style="font-size:13px;color:#555"> → SDL.query → MySQL timeout</span></div>
 </div>
 </div>
 </div>
 
 <div id="SLIDE_3" style="display:none">
 <div style="white-space:normal;line-height:1.8">
-<div style="background:#111;border-radius:6px;padding:14px 18px;border-left:3px solid #f7768e;margin-bottom:16px"><span class="bold" style="color:#d4d4d4;font-size:15px">New code queries <span class="r">sessionId.s</span> (raw string) instead of <span class="g">sessionId.h</span> (hash)</span><div style="color:#f7768e;font-size:14px;font-weight:700;margin-top:6px">→ Bypasses sessionId_h_idx index → Full table scan: 40M rows / 29.2 GB</div></div>
+<div style="background:#111;border-radius:6px;padding:14px 18px;border-left:3px solid #f7768e;margin-bottom:16px"><span class="bold" style="color:#d4d4d4;font-size:15px">New code queries <span class="r">listingId.s</span> (raw string) instead of <span class="g">listingId.h</span> (hash)</span><div style="color:#f7768e;font-size:14px;font-weight:700;margin-top:6px">→ Bypasses listingId_h_idx index → Full table scan: 40M rows / 29.2 GB</div></div>
 <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
 <div style="color:#aaa;padding:4px 0"><span class="bold" style="color:#7aa2f7">1.</span> <span class="bold">Deploy</span> — v1.7082.0, Feb 11 by orst, rollout completed 13:47 UTC</div>
-<div style="color:#aaa;padding:4px 0"><span class="bold" style="color:#7aa2f7">2.</span> <span class="bold">Errors</span> — <span class="r">DEADLINE_EXCEEDED</span> on DeleteAttendance, <span class="r bold">4.2% error rate</span></div>
-<div style="color:#aaa;padding:4px 0"><span class="bold" style="color:#7aa2f7">3.</span> <span class="bold">Logs</span> — <span class="y">"Query exceeded 5000ms"</span> → SDL.delete → MySQL timeout</div>
-<div style="color:#aaa;padding:4px 0"><span class="bold" style="color:#7aa2f7">4.</span> <span class="bold">Schema</span> — <span class="cy">sessionId_h_idx</span> indexes the hash, but code filters on raw string</div>
+<div style="color:#aaa;padding:4px 0"><span class="bold" style="color:#7aa2f7">2.</span> <span class="bold">Errors</span> — <span class="r">DEADLINE_EXCEEDED</span> on propertyListing, <span class="r bold">4.2% error rate</span></div>
+<div style="color:#aaa;padding:4px 0"><span class="bold" style="color:#7aa2f7">3.</span> <span class="bold">Logs</span> — <span class="y">"Query exceeded 5000ms"</span> → SDL.query → MySQL timeout</div>
+<div style="color:#aaa;padding:4px 0"><span class="bold" style="color:#7aa2f7">4.</span> <span class="bold">Schema</span> — <span class="cy">listingId_h_idx</span> indexes the hash, but code filters on raw string</div>
 <div style="color:#aaa;padding:4px 0"><span class="bold" style="color:#7aa2f7">5.</span> <span class="bold">EXPLAIN</span> — Indexed: <span class="g bold">1 row, cost 0.35</span> vs Broken: <span class="r bold">40M rows, cost 4.9M</span> — <span class="r bold">14,000,000× difference</span></div>
 </div>
 </div>
@@ -448,13 +456,70 @@ Deactivate feature toggle <code>useDataLocality</code> — disables broken code 
 <div id="SLIDE_4" style="display:none">
 <div style="white-space:normal;line-height:1.8">
 <div style="display:flex;flex-direction:column;gap:12px">
-<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #ff9e64"><span class="bold" style="color:#ff9e64;font-size:15px">Explore</span><span style="color:#555;font-size:13px">(Find attendance delete code)</span><div style="color:#aaa;font-size:13px;margin-top:3px">Done — 27 tool uses · 90.9k tokens · 1m 1s</div></div>
-<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #9ece6a"><span class="bold" style="color:#9ece6a;font-size:15px">Update</span><span style="color:#555;font-size:13px">(AttendanceDeleteHandler.scala)</span><div style="color:#aaa;font-size:13px;margin-top:3px">Added <span class="g bold">9 lines</span>, removed <span class="r">1 line</span> — use hash-based index lookup</div></div>
-<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #7dcfff"><span class="bold" style="color:#7dcfff;font-size:15px">Bash</span><span style="color:#555;font-size:13px">(gh pr create)</span><div style="color:#aaa;font-size:13px;margin-top:3px"><span class="g bold">✓</span> PR created: <span class="b" style="text-decoration:underline">#29225</span> — [bookings-attendance] Fix DeleteAttendance full table scan</div></div>
+<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #ff9e64"><span class="bold" style="color:#ff9e64;font-size:15px">Explore</span><span style="color:#555;font-size:13px">(Find property listing query code)</span><div style="color:#aaa;font-size:13px;margin-top:3px">Done — 27 tool uses · 90.9k tokens · 1m 1s</div></div>
+<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #9ece6a"><span class="bold" style="color:#9ece6a;font-size:15px">Update</span><span style="color:#555;font-size:13px">(PropertyListingHandler.scala)</span><div style="color:#aaa;font-size:13px;margin-top:3px">Added <span class="g bold">9 lines</span>, removed <span class="r">1 line</span> — use hash-based index lookup</div></div>
+<div style="background:#111;border-radius:6px;padding:12px 16px;border-left:3px solid #7dcfff"><span class="bold" style="color:#7dcfff;font-size:15px">Bash</span><span style="color:#555;font-size:13px">(gh pr create)</span><div style="color:#aaa;font-size:13px;margin-top:3px"><span class="g bold">✓</span> PR created: <span class="b" style="text-decoration:underline">#29225</span> — [real-estate-webapp] Fix propertyListing full table scan</div></div>
 <div style="border-top:1px solid #222;margin:4px 0"></div>
 <div style="text-align:center;padding:8px 0"><span class="g bold" style="font-size:17px">Full loop complete.</span><div style="color:#888;font-size:13px;margin-top:6px">Query cost: <span class="r">4,930,313</span> → <span class="g bold">0.35</span> — <span class="bold" style="color:#d4d4d4">14 million× faster</span></div><div style="color:#555;font-size:12px;margin-top:4px">15 tools · ~2 minutes · Investigation → Fix → PR</div></div>
 </div>
 </div>
+</div>
+
+<!-- ═══════ STEP 7: POST-MORTEM ═══════ -->
+<hr class="div">
+<div class="blk prompt" id="B_7prompt">
+  <span class="caret">❯</span>
+  <span class="ptxt" style="color:#d4d4d4">Generate a post-mortem for this incident and persist it for future prevention</span>
+</div>
+
+<div class="blk think" id="B_7t">
+  <div class="think-bd" style="padding-left:2px;font-style:normal;color:#aaa">I have the full evidence chain from this investigation. Let me generate a structured post-mortem document and save it.</div>
+</div>
+
+<div class="blk tool" id="B_7a">
+  <div class="tool-h"><span class="tool-tri">●</span> <span class="tool-nm" style="color:#9ece6a">Write</span><span class="d">(docs/postmortems/incident-5103-propertyListing-missing-index.md)</span></div>
+  <div class="tool-out"><span class="bar">⎿ </span>Created file with <span class="g bold">87 lines</span></div>
+</div>
+
+<div class="blk resp" id="B_7b">
+<strong style="color:#9ece6a;font-size:14px">Post-Mortem Generated — Incident #5103</strong>
+
+<strong class="b">Post-Mortem: bookings-real-estate-webapp</strong>
+<span class="bold">Missing Index on propertyListing — Incident #5103</span>
+
+<strong class="cy">Impact</strong>
+  <span class="cy">propertyListing</span> endpoint P95 latency spiked from <span class="g">120ms</span> → <span class="r bold">8.5s</span>,
+  error rate jumped from 0.1% → <span class="r bold">4.2%</span> (DEADLINE_EXCEEDED).
+  Affected ~12,400 requests over a 27-minute window.
+  No data loss. Booking creation unaffected — scoped to search/browse.
+
+<strong class="cy">Root Cause</strong>
+  Commit <span class="o">a3f92c1</span> (v1.7082.0, by orst) modified <code>findPropertyListings()</code>
+  switching filter key from <span class="g">listingId.h</span> (hash, indexed) to
+  <span class="r">listingId.s</span> (raw string, unindexed) on <code>property_listings</code> table.
+  Every query performed a full table scan: 40M rows / 29.2 GB.
+
+<strong class="cy">Timeline</strong>
+<span class="etbl"> <span class="hdr">Time(UTC)  Event</span>
+ 09:17      Deploy v1.7082.0 begins rollout via Nile
+ 10:38      Rollout reaches 100% across all DCs
+ 10:42      <span class="r">Alert fires — Opsgenie #64177: SLO error rate on propertyListing</span>
+ 10:42      Wix Maintenance Agent activates — begins enrichment and triage
+ 10:43      Agent enrichment complete — correlates latency spike to <span class="y">usePropertyListing</span> FT
+ 10:44      Agent deactivates FT <span class="y">usePropertyListing</span> — immediate mitigation
+ 10:46      Latency returns to baseline (120ms P95)
+ 11:02      Deep investigation begins in Claude Code
+ 11:15      Root cause confirmed — index bypass via raw string query
+ 11:42      PR <span class="b">#29225</span> created with hash-based fix
+ 11:51      CI passes — fix merged to master
+ 12:10      FT <span class="y">usePropertyListing</span> re-activated with fix deployed</span>
+
+<strong class="cy">Lessons Learned</strong>
+  • SDL schema with HashedString columns needs lint rules to prevent raw .s access
+  • Structurally identical to incident #4821 (Nov 2025) — .s / .h confusion pattern
+  • Agent-driven triage reduced MTTR from ~45min (manual) to ~4min (automated)
+
+<span class="g bold">✓ Post-mortem saved and linked to incident #5103</span>
 </div>
 
 <!-- FINAL PROMPT -->
@@ -628,9 +693,9 @@ async function run() {
   show('B1');
   await W(300);
   if (autoMode) {
-    await typePrompt("An alert just fired on #bookings-urgent — error rate on DeleteAttendance spiked. Investigate the root cause, use server-infra plugin", 12);
+    await typePrompt("An alert just fired on #bookings-urgent — error rate on propertyListing spiked. Investigate the root cause, use server-infra plugin", 14);
   } else {
-    document.getElementById('ptxt').textContent = "An alert just fired on #bookings-urgent — error rate on DeleteAttendance spiked. Investigate the root cause, use server-infra plugin";
+    document.getElementById('ptxt').textContent = "An alert just fired on #bookings-urgent — error rate on propertyListing spiked. Investigate the root cause, use server-infra plugin";
     document.getElementById('pcur').style.display = 'none';
   }
   await step(500);
@@ -727,7 +792,7 @@ async function run() {
   await step(800);
 
   // ── ZOOM 3 ──
-  await zoom('SLIDE_3', 6000, 'Root Cause Analysis', 'sessionId.s (raw string) bypasses the hash index → 40M row full table scan on every delete.');
+  await zoom('SLIDE_3', 6000, 'Root Cause Analysis', 'listingId.s (raw string) bypasses the hash index → 40M row full table scan on every delete.');
 
   // ── STEP 6: Fixing the Issue ──
   show('B_6t');
@@ -757,6 +822,20 @@ async function run() {
   // ── ZOOM 4 ──
   await zoom('SLIDE_4', 6000, 'Fixing the Issue', 'Explore → Update → PR created. Full loop in ~2 minutes.');
 
+  // ── STEP 7: Post-Mortem ──
+  show('B_7prompt');
+  await step(800);
+  show('B_7t');
+  await step(600);
+
+  sp('Generating post-mortem from evidence chain…');
+  await W(autoMode ? 1000 : 200);
+  spOff();
+  show('B_7a'); stat(96800, 0.88, 50);
+  await step(1000);
+  show('B_7b'); stat(98400, 0.92, 51);
+  await step(1500);
+
   show('B_end');
   scrollDown(true);
   await step(1500);
@@ -774,7 +853,7 @@ async function run() {
   // Return to Slack
   document.body.classList.add('fadeout');
   await W(600);
-  window.location.href = 'slack.html?from=claude';
+  window.location.href = '/slack.html?from=claude';
 }
 
 setTimeout(run, 600);

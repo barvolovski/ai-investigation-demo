@@ -25,7 +25,7 @@ export function useInvestigation() {
   });
 
   const [elapsedTime, setElapsedTime] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setInterval>>();
+  const timerRef = useRef<ReturnType<typeof setInterval>>(undefined);
   const animationQueueRef = useRef<(() => void)[]>([]);
   const processingRef = useRef(false);
 
