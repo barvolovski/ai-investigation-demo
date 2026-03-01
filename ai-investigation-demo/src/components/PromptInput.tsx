@@ -8,10 +8,10 @@ interface PromptInputProps {
 
 const ALERT_SCENARIO = {
   channel: '#bookings-urgent',
-  title: 'High latency detected on DeleteAttendance endpoint',
-  service: 'bookings-attendance',
-  detail: 'DeleteAttendance P95 latency spiked to 8.5s (baseline: 120ms). DEADLINE_EXCEEDED errors at 4.2% rate.',
-  prompt: 'Alert on #bookings-urgent: High latency on bookings-attendance DeleteAttendance endpoint. P95 at 8.5s, DEADLINE_EXCEEDED errors spiking. Investigate root cause.',
+  title: 'SLO error rate on propertyListing endpoint',
+  service: 'bookings-real-estate-webapp',
+  detail: 'propertyListing P95 latency spiked to 8.5s (baseline: 120ms). DEADLINE_EXCEEDED errors at 4.2% rate.',
+  prompt: 'Alert on #bookings-urgent: High latency on bookings-real-estate-webapp propertyListing endpoint. P95 at 8.5s, DEADLINE_EXCEEDED errors spiking. Investigate root cause.',
 };
 
 export function PromptInput({ onSubmit, disabled }: PromptInputProps) {

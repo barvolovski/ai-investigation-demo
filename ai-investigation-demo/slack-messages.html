@@ -64,7 +64,7 @@
   }
 
   .avatar-opsgenie { background: #2684ff; }
-  .avatar-db-alert { background: #1a1d21; border: 2px solid #444; font-size: 16px; }
+  .avatar-opsgenie span { font-size: 15px; font-weight: 900; letter-spacing: -0.5px; }
   .avatar-wix { background: #fff; }
 
   .avatar-wix img {
@@ -312,11 +312,6 @@
     letter-spacing: -0.5px;
   }
 
-  .db-emoji {
-    font-size: 22px;
-    line-height: 1;
-  }
-
   .bold { font-weight: 700; color: #e8e8e9; }
   .muted { color: #7a7b7e; }
   .code {
@@ -334,26 +329,26 @@
 
 <div class="slack-container">
 
-  <!-- ==================== MESSAGE 1: DB Alert Bot ==================== -->
-  <div class="label">Message 1 — DB Alert Bot (screenshot this)</div>
+  <!-- ==================== MESSAGE 1: Opsgenie ==================== -->
+  <div class="label">Message 1 — Opsgenie (screenshot this)</div>
   <div class="message-group" id="msg1">
     <div class="day-separator">
       <span>Today</span>
     </div>
 
     <div class="slack-msg">
-      <div class="avatar avatar-db-alert">
-        <span class="db-emoji">🛢️</span>
+      <div class="avatar avatar-opsgenie">
+        <span>OG</span>
       </div>
       <div class="msg-content">
         <div class="msg-header">
-          <span class="msg-author">DB Alert Bot</span>
+          <span class="msg-author">Opsgenie</span>
           <span class="msg-badge">APP</span>
           <span class="msg-time">Today at 10:45 AM</span>
         </div>
 
         <div class="msg-text">
-          <p><span class="emoji">🚨</span> <span class="bold">ALERT: High latency detected on <span class="code">bookings_index</span> in prod-db-3.</span></p>
+          <p><span class="emoji">🚨</span> <span class="bold">SLO error rate on propertyListing — <span class="code">bookings_platform</span> in prod-db-3.</span></p>
           <p style="margin-top: 2px;">Investigation started.</p>
         </div>
 
@@ -361,11 +356,11 @@
           <div class="attachment-fields">
             <div>
               <div class="field-label">Service</div>
-              <div class="field-value">com.wixpress.bookings.attendance<br/>.bookings-attendance</div>
+              <div class="field-value">com.wixpress.bookings-real-estate-webapp</div>
             </div>
             <div>
               <div class="field-label">Endpoint</div>
-              <div class="field-value">DeleteAttendance</div>
+              <div class="field-value">propertyListing</div>
             </div>
             <div>
               <div class="field-label">Priority</div>
@@ -402,21 +397,21 @@
     </div>
   </div>
 
-  <!-- ==================== MESSAGE 2: Wix AI Assistant ==================== -->
-  <div class="label">Message 2 — Wix AI Assistant (screenshot this)</div>
+  <!-- ==================== MESSAGE 2: Wix Maintenance Assistant ==================== -->
+  <div class="label">Message 2 — Wix Maintenance Assistant (screenshot this)</div>
   <div class="message-group" id="msg2">
     <div class="slack-msg">
       <div class="wix-logo">Wix</div>
       <div class="msg-content">
         <div class="msg-header">
-          <span class="msg-author">Wix AI Assistant</span>
+          <span class="msg-author">Wix Maintenance Assistant</span>
           <span class="msg-badge">APP</span>
           <span class="msg-time">Today at 10:45 AM</span>
         </div>
 
         <div class="quote-block">
-          <p><strong>Investigation Summary:</strong> Recent degradation in artifact <span class="code">com.wixpress.bookings.attendance.bookings-attendance</span> endpoint: <strong>DeleteAttendance</strong> seems to be related to feature toggle <span class="code">useDataLocality</span>.</p>
-          <p style="margin-top: 8px;"><strong>Immediate Remediation:</strong> Deactivating Feature toggle <span class="code">useDataLocality</span></p>
+          <p><strong>Investigation Summary:</strong> Recent degradation in artifact <span class="code">com.wixpress.bookings-real-estate-webapp</span> endpoint: <strong>propertyListing</strong> seems to be related to feature toggle <span class="code">usePropertyListing</span>.</p>
+          <p style="margin-top: 8px;"><strong>Immediate Remediation:</strong> Deactivating Feature toggle <span class="code">usePropertyListing</span></p>
         </div>
 
         <div class="slack-buttons">
@@ -441,18 +436,18 @@
     </div>
 
     <div class="slack-msg">
-      <div class="avatar avatar-db-alert">
-        <span class="db-emoji">🛢️</span>
+      <div class="avatar avatar-opsgenie">
+        <span>OG</span>
       </div>
       <div class="msg-content">
         <div class="msg-header">
-          <span class="msg-author">DB Alert Bot</span>
+          <span class="msg-author">Opsgenie</span>
           <span class="msg-badge">APP</span>
           <span class="msg-time">Today at 10:45 AM</span>
         </div>
 
         <div class="msg-text">
-          <p><span class="emoji">🚨</span> <span class="bold">ALERT: High latency detected on <span class="code">bookings_index</span> in prod-db-3.</span></p>
+          <p><span class="emoji">🚨</span> <span class="bold">SLO error rate on propertyListing — <span class="code">bookings_platform</span> in prod-db-3.</span></p>
           <p style="margin-top: 2px;">Investigation started.</p>
         </div>
 
@@ -460,11 +455,11 @@
           <div class="attachment-fields">
             <div>
               <div class="field-label">Service</div>
-              <div class="field-value">com.wixpress.bookings.attendance<br/>.bookings-attendance</div>
+              <div class="field-value">com.wixpress.bookings-real-estate-webapp</div>
             </div>
             <div>
               <div class="field-label">Endpoint</div>
-              <div class="field-value">DeleteAttendance</div>
+              <div class="field-value">propertyListing</div>
             </div>
             <div>
               <div class="field-label">Priority</div>
@@ -495,14 +490,14 @@
       <div class="wix-logo">Wix</div>
       <div class="msg-content">
         <div class="msg-header">
-          <span class="msg-author">Wix AI Assistant</span>
+          <span class="msg-author">Wix Maintenance Assistant</span>
           <span class="msg-badge">APP</span>
           <span class="msg-time">Today at 10:45 AM</span>
         </div>
 
         <div class="quote-block">
-          <p><strong>Investigation Summary:</strong> Recent degradation in artifact <span class="code">com.wixpress.bookings.attendance.bookings-attendance</span> endpoint: <strong>DeleteAttendance</strong> seems to be related to feature toggle <span class="code">useDataLocality</span>.</p>
-          <p style="margin-top: 8px;"><strong>Immediate Remediation:</strong> Deactivating Feature toggle <span class="code">useDataLocality</span></p>
+          <p><strong>Investigation Summary:</strong> Recent degradation in artifact <span class="code">com.wixpress.bookings-real-estate-webapp</span> endpoint: <strong>propertyListing</strong> seems to be related to feature toggle <span class="code">usePropertyListing</span>.</p>
+          <p style="margin-top: 8px;"><strong>Immediate Remediation:</strong> Deactivating Feature toggle <span class="code">usePropertyListing</span></p>
         </div>
 
         <div class="slack-buttons">

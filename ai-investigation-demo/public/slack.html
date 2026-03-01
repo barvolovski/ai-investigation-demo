@@ -346,17 +346,21 @@ body.fadeout{opacity:0}
 
     <div class="day-sep"><button>Today</button></div>
 
-    <!-- DB Alert Bot - RED ALERT -->
+    <!-- Opsgenie Alert - RED -->
     <div class="msg" id="dbAlertMsg">
-      <div class="db-av">🛢️</div>
+      <div class="opsgenie-av"><span>OG</span></div>
       <div class="msg-body">
-        <div class="msg-head"><span class="msg-author">DB Alert Bot</span><span class="app-tag">APP</span><span class="msg-ts">Today at 10:45 AM</span></div>
+        <div class="msg-head"><span class="msg-author">Opsgenie</span><span class="app-tag">APP</span><span class="msg-ts">Today at 10:45 AM</span></div>
         <div class="attach" id="alertAttach" style="border-left-color:#e01e5a;transition:border-left-color .8s ease">
+          <div class="attach-title" style="color:#e01e5a" id="alertPrefix">🔴 #5103: [Grafana]: SLO error rate on propertyListing — com.wixpress.bookings-real-estate-webapp</div>
           <div class="msg-text" id="dbAlertText">
-            <p><span class="bold" style="color:#e01e5a;transition:color .8s" id="alertPrefix">🔴 ALERT</span>: High latency detected on <span class="code">bookings_index</span> in <span class="code">prod-db-3</span></p>
-            <p style="margin-top:4px;color:#616061;font-size:14px">Service: <span class="code">com.wixpress.bookings.attendance.bookings-attendance</span></p>
-            <p style="margin-top:2px;color:#616061;font-size:14px">Endpoint: <span class="bold">DeleteAttendance</span> · P95: <span class="bold" style="color:#e01e5a">8.5s</span> (baseline: 120ms)</p>
+            <p style="margin-top:4px;color:#616061;font-size:14px">Service: <span class="code">com.wixpress.bookings-real-estate-webapp</span></p>
+            <p style="margin-top:2px;color:#616061;font-size:14px">Endpoint: <span class="bold">propertyListing</span> · P95: <span class="bold" style="color:#e01e5a">8.5s</span> (baseline: 120ms)</p>
             <p style="margin-top:2px;color:#616061;font-size:14px">Error rate: <span class="bold" style="color:#e01e5a">4.2%</span> DEADLINE_EXCEEDED</p>
+          </div>
+          <div class="attach-fields" style="margin-top:8px">
+            <div><div class="field-label">Priority</div><div class="field-val">P1</div></div>
+            <div><div class="field-label">Routed Teams</div><div class="field-val">Bookings_Platform,<br>Bookings_Real_Estate</div></div>
           </div>
           <div class="resolved-badge" id="resolvedBadge">✅ Resolved — Latency returned to baseline (120ms P95)</div>
         </div>
@@ -369,8 +373,9 @@ body.fadeout{opacity:0}
       <div class="msg-body">
         <div class="msg-head"><span class="msg-author">Wix Maintenance Assistant</span><span class="app-tag">APP</span><span class="msg-ts">Today at 10:45 AM</span></div>
         <div class="quote" id="quoteBlock" style="transition:border-left-color .8s ease">
-          <p style="line-height:1.5"><span class="bold">Investigation Summary:</span> Recent degradation in artifact <span class="code">com.wixpress.bookings.attendance.bookings-attendance</span> endpoint: <span class="bold">DeleteAttendance</span> seems to be related to feature toggle <span class="code">useDataLocality</span>.</p>
-          <p style="margin-top:6px;line-height:1.5"><span class="bold">Immediate Remediation:</span> Deactivating Feature toggle <span class="code">useDataLocality</span></p>
+          <p style="line-height:1.5"><span class="bold">Investigation Summary:</span> Recent degradation in artifact <span class="code">com.wixpress.bookings-real-estate-webapp</span> endpoint: <span class="bold">propertyListing</span> seems to be related to feature toggle <span class="code">usePropertyListing</span>.</p>
+          <p style="margin-top:6px;line-height:1.5"><span class="bold">Immediate Remediation:</span> Deactivating Feature toggle <span class="code">usePropertyListing</span></p>
+          <p style="margin-top:8px"><span class="bold" style="color:#2eb67d;font-size:15px">Confidence: High</span></p>
         </div>
         <div class="slack-btns">
           <a href="/" class="slack-btn" id="investigateBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Investigate with Cursor</a>
@@ -386,8 +391,8 @@ body.fadeout{opacity:0}
         <div class="msg-head"><span class="msg-author">Wix Maintenance Assistant</span><span class="app-tag">APP</span><span class="msg-ts">Today at 11:38 AM</span></div>
         <div class="msg-text">
           <p>✅ <span class="bold">Automated remediation applied.</span></p>
-          <p style="margin-top:6px">Feature toggle <span class="code" style="color:#2eb67d;border-color:#b7e4c7;background:#f0faf4">useDataLocality</span> has been <span class="bold">deactivated</span> for artifact <span class="code" style="color:#2eb67d;border-color:#b7e4c7;background:#f0faf4">bookings-attendance</span>.</p>
-          <p style="margin-top:6px;color:#616061;font-size:14px">DeleteAttendance P95 latency: <span class="bold" style="color:#e01e5a;text-decoration:line-through">8.5s</span> → <span class="bold" style="color:#2eb67d">120ms</span> ↓</p>
+          <p style="margin-top:6px">Feature toggle <span class="code" style="color:#2eb67d;border-color:#b7e4c7;background:#f0faf4">usePropertyListing</span> has been <span class="bold">deactivated</span> for artifact <span class="code" style="color:#2eb67d;border-color:#b7e4c7;background:#f0faf4">bookings-real-estate-webapp</span>.</p>
+          <p style="margin-top:6px;color:#616061;font-size:14px">propertyListing P95 latency: <span class="bold" style="color:#e01e5a;text-decoration:line-through">8.5s</span> → <span class="bold" style="color:#2eb67d">120ms</span> ↓</p>
         </div>
         <div class="reactions" id="fixReactions" style="display:none">
           <span class="reaction">🎉 3</span><span class="reaction">🙏 2</span><span class="reaction">✅ 5</span>
@@ -397,9 +402,9 @@ body.fadeout{opacity:0}
 
     <!-- METRICS (Frame 5 - after returning from CI Notifier) -->
     <div class="msg hidden-msg" id="metricsMsg" style="margin-top:4px">
-      <div class="db-av">🛢️</div>
+      <div class="opsgenie-av"><span>OG</span></div>
       <div class="msg-body">
-        <div class="msg-head"><span class="msg-author">DB Alert Bot</span><span class="app-tag">APP</span><span class="msg-ts">Today at 12:15 PM</span></div>
+        <div class="msg-head"><span class="msg-author">Opsgenie</span><span class="app-tag">APP</span><span class="msg-ts">Today at 12:15 PM</span></div>
         <div class="metrics-card">
           <p style="font-weight:700;color:#1a7f37;font-size:15px">📉 Alert Resolved — Metrics back to normal</p>
           <div class="metrics-row">
@@ -409,7 +414,7 @@ body.fadeout{opacity:0}
             <span class="metric-arrow">→</span>
             <div class="metric"><span class="metric-label">Query Cost</span><span class="metric-val bad">4,930,313</span><span class="metric-val">0.35</span></div>
           </div>
-          <p style="font-size:13px;color:#616061;margin-top:8px">DeleteAttendance on <span class="code" style="color:#2eb67d;border-color:#b7e4c7;background:#f0faf4">bookings-attendance</span> · prod-db-3 · bookings_index</p>
+          <p style="font-size:13px;color:#616061;margin-top:8px">propertyListing on <span class="code" style="color:#2eb67d;border-color:#b7e4c7;background:#f0faf4">bookings-real-estate-webapp</span> · prod-db-3 · bookings_platform</p>
         </div>
         <div class="reactions"><span class="reaction">🎉 8</span><span class="reaction">💪 5</span><span class="reaction">🤖 12</span><span class="reaction">🧠 3</span></div>
       </div>
@@ -460,7 +465,7 @@ body.fadeout{opacity:0}
       <div class="msg-body">
         <div class="msg-head"><span class="msg-author">CI Notifier</span><span class="app-tag">APP</span><span class="msg-ts">11:42 AM</span></div>
         <div class="msg-text">
-          <p>Tracking build for commit <span class="link">a3f821c</span> - fix(attendance): use hash-based index lookup for DeleteAttendance (<span class="link">#4821</span>)</p>
+          <p>Tracking build for commit <span class="link">a3f821c</span> - fix(real-estate): use hash-based index lookup for propertyListing (<span class="link">#4821</span>)</p>
           <p style="margin-top:2px;color:#616061;font-size:13px">Estimated duration: 9m</p>
         </div>
         <div class="thread-bar"><div class="t-av" style="background:#1a1a2e;font-size:7px;color:#4fc3f7">CI</div><span class="t-text">2 replies</span><span class="t-time">Last reply 28 minutes ago</span></div>
@@ -473,7 +478,7 @@ body.fadeout{opacity:0}
       <div class="msg-body">
         <div class="msg-head"><span class="msg-author">CI Notifier</span><span class="app-tag">APP</span><span class="msg-ts">11:51 AM</span></div>
         <div class="msg-text" style="font-size:14px;color:#616061">
-          <p>replied to a thread: <span class="link">Tracking build for commit a3f821c</span> - fix(attendance): use hash-based index lookup for DeleteAttendance (<span class="link">#4821</span>)</p>
+          <p>replied to a thread: <span class="link">Tracking build for commit a3f821c</span> - fix(real-estate): use hash-based index lookup for propertyListing (<span class="link">#4821</span>)</p>
           <p style="margin-top:6px;font-size:15px;color:#1d1c1d"><span style="color:#2eb67d;font-size:16px">✓</span> <span class="bold">build state:</span> <span style="color:#2eb67d;font-weight:700">passed</span> <span style="color:#616061">(Finished (Success))</span></p>
         </div>
       </div>
@@ -586,7 +591,7 @@ function stageCard(num, title, desc, dur) {
 
 function goGreen() {
   document.getElementById('alertAttach').style.borderLeftColor = '#2eb67d';
-  document.getElementById('alertPrefix').textContent = '\u2705 RESOLVED';
+  document.getElementById('alertPrefix').textContent = '\u2705 RESOLVED: #5103 — propertyListing latency returned to baseline';
   document.getElementById('alertPrefix').style.color = '#2eb67d';
   document.getElementById('resolvedBadge').classList.add('show');
   document.getElementById('quoteBlock').style.borderLeftColor = '#2eb67d';
@@ -628,7 +633,7 @@ async function runDemo() {
     // ═══════ PART 1: Slack beginning ═══════
 
     await stageCard('1', 'Alert',
-      'Error rate spiking on DeleteAttendance. Response times degrading across key endpoints.',
+      'Error rate spiking on propertyListing endpoint. P95 latency at 8.5s, DEADLINE_EXCEEDED errors rising.',
       3000);
 
     await step(3000);
@@ -645,8 +650,8 @@ async function runDemo() {
       '<div style="margin-bottom:16px;font-size:13px;color:#888;text-transform:uppercase;letter-spacing:1px;font-weight:700">Automated Stabilization</div>' +
       '<div style="background:#f0faf4;border:1px solid #b7e4c7;border-radius:8px;padding:16px 20px;margin-bottom:14px">' +
         '<p style="font-size:17px;font-weight:700;color:#1d1c1d;margin-bottom:8px">✅ Automated remediation applied.</p>' +
-        '<p style="font-size:16px;line-height:1.6;color:#1d1c1d">Feature toggle <span style="background:#e8f5e9;border:1px solid #b7e4c7;border-radius:3px;padding:1px 6px;font-family:monospace;font-size:14px;color:#2eb67d;font-weight:700">useDataLocality</span> has been <strong>deactivated</strong> for artifact <span style="background:#e8f5e9;border:1px solid #b7e4c7;border-radius:3px;padding:1px 6px;font-family:monospace;font-size:14px;color:#2eb67d;font-weight:700">bookings-attendance</span>.</p>' +
-        '<p style="font-size:15px;margin-top:10px;color:#616061">DeleteAttendance P95 latency: <strong style="color:#e01e5a;text-decoration:line-through">8.5s</strong> → <strong style="color:#2eb67d;font-size:18px">120ms</strong> ↓</p>' +
+        '<p style="font-size:16px;line-height:1.6;color:#1d1c1d">Feature toggle <span style="background:#e8f5e9;border:1px solid #b7e4c7;border-radius:3px;padding:1px 6px;font-family:monospace;font-size:14px;color:#2eb67d;font-weight:700">usePropertyListing</span> has been <strong>deactivated</strong> for artifact <span style="background:#e8f5e9;border:1px solid #b7e4c7;border-radius:3px;padding:1px 6px;font-family:monospace;font-size:14px;color:#2eb67d;font-weight:700">bookings-real-estate-webapp</span>.</p>' +
+        '<p style="font-size:15px;margin-top:10px;color:#616061">propertyListing P95 latency: <strong style="color:#e01e5a;text-decoration:line-through">8.5s</strong> → <strong style="color:#2eb67d;font-size:18px">120ms</strong> ↓</p>' +
       '</div>' +
       '<div style="color:#888;font-size:14px;text-align:center;font-style:italic">Production is now stable. The immediate threat is resolved.</div>',
       4500);
