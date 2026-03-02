@@ -378,7 +378,7 @@ body.fadeout{opacity:0}
           <p style="margin-top:8px"><span class="bold" style="color:#2eb67d;font-size:15px">Confidence: High</span></p>
         </div>
         <div class="slack-btns">
-          <a href="/" class="slack-btn" id="investigateBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Investigate with Cursor</a>
+          <a href="#" class="slack-btn" id="investigateBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Investigate with Cursor</a>
           <a href="#" class="slack-btn" id="claudeBtn" onclick="event.preventDefault();document.body.classList.add('fadeout');setTimeout(function(){window.location.href='claude-code.html'},500)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Investigate with Claude Code</a>
         </div>
       </div>
@@ -663,7 +663,7 @@ async function runDemo() {
     await step(800);
     document.body.classList.add('fadeout');
     await W(500);
-    window.location.href = '/claude-code.html';
+    window.location.href = 'claude-code.html';
 
   } else {
     // ═══════ PART 2: Return from Claude Code ═══════
