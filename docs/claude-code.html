@@ -34,6 +34,8 @@ body{animation:fadeIn .5s ease}
 .welc .star{color:#ff9e64;font-weight:700}
 .welc .pth{color:#7aa2f7}
 .welc .hl{color:#d4d4d4;font-weight:700}
+.welc-logo{display:flex;justify-content:center;margin:-4px 0 10px}
+.welc-logo svg{width:72px;height:72px;filter:drop-shadow(0 0 12px rgba(217,119,87,.4))}
 
 /* ── USER PROMPT ── */
 .prompt{margin:8px 0 12px;display:flex;gap:8px;align-items:flex-start}
@@ -139,8 +141,8 @@ body{animation:fadeIn .5s ease}
 <div class="sw" id="sw">
 
 <!-- ═══════ WELCOME ═══════ -->
-<div class="blk welc" id="B0"><span class="star">╭──────────────────────────────────────────────────────╮</span>
-<span class="star">│</span> <span class="star">✻</span> <span class="hl">Welcome to Claude Code!</span>                             <span class="star">│</span>
+<div class="blk welc" id="B0"><div class="welc-logo"><svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="cg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#E8956A"/><stop offset="100%" stop-color="#D97757"/></radialGradient></defs><g transform="translate(50,50)"><circle r="9" fill="url(#cg)"/><g fill="url(#cg)"><ellipse cx="0" cy="-30" rx="5.5" ry="19" /><ellipse cx="0" cy="-30" rx="5.5" ry="19" transform="rotate(51.4)"/><ellipse cx="0" cy="-30" rx="5.5" ry="19" transform="rotate(102.8)"/><ellipse cx="0" cy="-30" rx="5.5" ry="19" transform="rotate(154.3)"/><ellipse cx="0" cy="-30" rx="5.5" ry="19" transform="rotate(205.7)"/><ellipse cx="0" cy="-30" rx="5.5" ry="19" transform="rotate(257.1)"/><ellipse cx="0" cy="-30" rx="5.5" ry="19" transform="rotate(308.6)"/></g></g></svg></div><span class="star">╭──────────────────────────────────────────────────────╮</span>
+<span class="star">│</span>   <span class="hl">Welcome to Claude Code!</span>                             <span class="star">│</span>
 <span class="star">│</span>                                                      <span class="star">│</span>
 <span class="star">│</span>   /help for help                                     <span class="star">│</span>
 <span class="star">│</span>                                                      <span class="star">│</span>
